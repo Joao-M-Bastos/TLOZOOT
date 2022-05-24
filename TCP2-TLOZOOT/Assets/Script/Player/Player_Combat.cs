@@ -16,7 +16,7 @@ public class Player_Combat : MonoBehaviour
 
     //Charge
     float charge;
-    bool isChargeing;
+    bool isCharged;
 
     //Ray
     Vector3 rayDirection;
@@ -26,7 +26,6 @@ public class Player_Combat : MonoBehaviour
     {
         canAttack = true;
         charge = 0;
-        isChargeing = false;
     }
 
     // Start is called before the first frame update
@@ -38,31 +37,29 @@ public class Player_Combat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canAttack){
+        if(Input.GetMouseButtonUp(0)){
+            if(isCharged) attack(3);
+            charge = 0;
+            isCharged = false;
+        }else if(canAttack){
             if (Input.GetMouseButton(0)){
                 attack(getAtkType());
             }                    
         }
-        if(Input.GetMouseButtonUp(0)){
-                if(charge > 2) attack(3);
-                isChargeing = false;
-                charge = 0;
-        }   
         
         
     }
 
-    public int getAtkType(){        
+    public int getAtkType(){
         if(!player_Move.isClimb){
             if(player_Move.isGround){
+                
+                charge += 1;                
 
-                isChargeing = true;
-
-                if(isChargeing){
-                    charge += 1;
+                if(charge >= 3){
+                    isCharged = true;
                 }
-
-                if(charge > 1){
+                if(charge >= 2){
                     return 4;
                 }
 
@@ -106,7 +103,7 @@ public class Player_Combat : MonoBehaviour
             Debug.Log("Air Attack");
         }
 
-        RayCast(rayDirection, rayHitRange);
+        HitEnemy(rayHitRange);
 
         lastAtkType = tipo;
 
@@ -115,18 +112,15 @@ public class Player_Combat : MonoBehaviour
         StartCoroutine(ResetAttackCooldown());
     }
 
-    void RayCast(Vector3 direction,float rayHitRange){
+    void HitEnemy(float rayHitRange){
         
         RaycastHit hit;
         if(Physics.Raycast(transform.position, transform.forward, out hit, rayHitRange)){
         
          if(hit.transform.gameObject.tag == "Enemy")
          {
-            Debug.Log("Tomou dano");
+            Debug.Log("Inimigo tomou dano");
          }
-
-         
-    
         }
     }
     
