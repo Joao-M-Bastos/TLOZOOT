@@ -10,7 +10,7 @@ public class Player_Move : MonoBehaviour
     private Rigidbody rb;
     public Quaternion playerRotation;
 
-    RaycastHit wallHit;
+
 
     //Camera
     public float velocidadecamera;
@@ -28,11 +28,13 @@ public class Player_Move : MonoBehaviour
     public float speedClimb;
     
     public bool isClimb, isInWall;
+    RaycastHit wallHit;
+    public LayerMask climbLayerMask;
 
     //Jump
-    public bool isGround;
     public float jumpforce;
     private Vector3 jump, jumpC;
+    public LayerMask groundLayerMask;
 
 
 
@@ -77,6 +79,8 @@ public class Player_Move : MonoBehaviour
             anim.SetBool("Walk", false);
         }
 
+
+
         if(Input.GetKeyDown(KeyCode.Space)) Jump();
 
         maincamera.transform.rotation = Quaternion.Lerp(maincamera.transform.rotation, playerRotation, velocidaderotacaocamera * Time.deltaTime);
@@ -90,31 +94,11 @@ public class Player_Move : MonoBehaviour
         transform.rotation = playerRotation;
     }
 
-    void OnCollisionStay(Collision other)
-    {
-        
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground"){
-            isGround = true;
-            //anim.SetBool("Jump", false);
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground"){
-            isGround = false;
-            //anim.SetBool("Jump", false);
-        }
-    }
-
     void StartClimb(){
         isClimb = true;
         rb.useGravity = false;
         playerRotation = Quaternion.LookRotation(-wallHit.normal);
+        transform.Translate(0, 0, 0);
     }
 
     void Climb(){
@@ -134,7 +118,7 @@ public class Player_Move : MonoBehaviour
 
         float wallLookAngle;        
 
-        if(Physics.Raycast(transform.position + new Vector3(0,-0.1f,0), transform.forward, out wallHit, 0.45f)){
+        if(Physics.Raycast(transform.position + new Vector3(0,-0.1f,0), transform.forward, out wallHit, 0.45f, climbLayerMask)){
             wallLookAngle = Vector3.Angle(transform.forward, -wallHit.normal);
             if(wallLookAngle < 65){
                 return true;
@@ -164,7 +148,7 @@ public class Player_Move : MonoBehaviour
 
     void Jump(){
         if(!isClimb){
-            if (isGround)
+            if (isGround())
             {
                 rb.AddForce(transform.up * jumpforce, ForceMode.Impulse);
                 //anim.SetBool("Jump", true);
@@ -175,6 +159,15 @@ public class Player_Move : MonoBehaviour
             }else transform.Translate(transform.TransformDirection(wallHit.normal) * jumpforce * 0.1f);
             StopClimb();
         }   
+    }
+
+    public bool isGround(){
+        RaycastHit groundHit;
+
+        if(Physics.Raycast(transform.position, -transform.up, out groundHit, 0.8f, groundLayerMask)){
+            return true;
+        }
+        return false;
     }
 
     void Run(){        

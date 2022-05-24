@@ -52,7 +52,7 @@ public class Player_Combat : MonoBehaviour
 
     public int getAtkType(){
         if(!player_Move.isClimb){
-            if(player_Move.isGround){
+            if(player_Move.isGround()){
                 
                 charge += 1;                
 
@@ -91,10 +91,11 @@ public class Player_Combat : MonoBehaviour
         if(tipo == 1){
             Debug.Log("Walking Attack");       
             rayDirection = Vector3.forward;
-            rayHitRange = 1;
+            rayHitRange = 2;
         }else if(tipo == 2){
             Debug.Log("Stopped Attack");
-            rayDirection = new Vector3(1,0,2);
+            rayDirection = Vector3.forward;
+            rayHitRange = 2;
         }else if(tipo == 3){
             Debug.Log("Charged Attack");
         }else if(tipo == 4){
