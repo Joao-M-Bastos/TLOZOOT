@@ -6,10 +6,13 @@ using UnityEngine.UI;
 public class ShieldIconBehavior : MonoBehaviour
 {
     public Image img;
+    public Sprite sprite;
+
     // Start is called before the first frame update
     void Start()
     {        
         img.enabled = false;
+        img.sprite = sprite;
     }
 
     // Update is called once per frame

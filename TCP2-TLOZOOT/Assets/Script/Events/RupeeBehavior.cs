@@ -5,13 +5,10 @@ using UnityEngine;
 public class RupeeBehavior : MonoBehaviour
 {
     public GameObject player;
+
+    private float distanceFromPlayer;
     [SerializeField]
     private int increase;
-
-    void Awake()
-    {
-        player = GameObject.FindWithTag("Player");
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -22,12 +19,15 @@ public class RupeeBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.Rotate(new Vector3(0, 36, 0) * Time.deltaTime);
+        distanceFromPlayer = Vector3.Distance(this.transform.position, player.transform.position);
+        if(distanceFromPlayer < 10){
+            this.transform.gameObject.tag = "Rotation";
+        }else this.transform.gameObject.tag = "Untagged";
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider collider)
     {
-        if (other.gameObject == player)
+        if (collider.gameObject == player)
         {
             varHolder.inst.rupees += increase;
             Destroy(this.gameObject);

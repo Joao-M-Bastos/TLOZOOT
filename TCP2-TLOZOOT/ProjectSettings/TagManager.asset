@@ -4,10 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PlayerEyes
-  - Ground
-  - Climb
+  - Rotation
   - Enemy
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -15,12 +14,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
   - Climb
   - Ground
+  - Enemy
+  - 
+  - 
+  - 
   - 
   - 
   - 
