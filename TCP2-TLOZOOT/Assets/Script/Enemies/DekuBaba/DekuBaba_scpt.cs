@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DekuBaba_scpt : MonoBehaviour
 {
-    public Player_Combat player_Combat;
+    public Player_Move player_Move;
     public Animator animator;
     public Combat combat;
 
@@ -36,12 +36,12 @@ public class DekuBaba_scpt : MonoBehaviour
     }    
 
     void LookAtPlayer(){
-        this.transform.LookAt(player_Combat.transform);
+        this.transform.LookAt(player_Move.transform);
         this.transform.rotation = new Quaternion(0,this.transform.rotation.y,0,this.transform.rotation.w);
     }
 
     float PlayerDistance(){
-        return Vector3.Distance(this.transform.position, player_Combat.transform.position);
+        return Vector3.Distance(this.transform.position, player_Move.transform.position);
     }
 
     void Behaviour(float distance){
@@ -49,8 +49,8 @@ public class DekuBaba_scpt : MonoBehaviour
             this.animator.SetBool("isShown", true);
         }else this.animator.SetBool("isShown", false);
 
-        if(distance < 3){
-            if(canAttack) Attack();
+        if(distance < 3 && canAttack){
+            Attack();
         }
     }
 

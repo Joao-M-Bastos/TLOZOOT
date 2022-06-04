@@ -7,6 +7,7 @@ TagManager:
   - Rotation
   - Enemy
   - Ground
+  - LockOnTarget
   layers:
   - Default
   - TransparentFX

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Combat : MonoBehaviour
+public class Player_Attack : MonoBehaviour
 {
 
     //Instancias
@@ -15,7 +15,6 @@ public class Player_Combat : MonoBehaviour
     public bool canAttack;
     public float atkCooldown;
     public int atkCombo,atkTipo,lastAtkType;
-
     
 
     //Charge

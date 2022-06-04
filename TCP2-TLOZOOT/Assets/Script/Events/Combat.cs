@@ -10,7 +10,7 @@ public class Combat : MonoBehaviour
 
     public bool isKnockbackResistant, isVulnerable;
 
-    public Rigidbody rb;
+    private Rigidbody rb;
 
     public void Awake(){
         if(this.gameObject.GetComponent<Rigidbody>() != null){
@@ -18,7 +18,7 @@ public class Combat : MonoBehaviour
         }
     }
 
-    public void TakeDamege(int damage){
+    public void TakeDamage(int damage){
         if(isVulnerable){
             this.life -= damage;
             isVulnerable = false;

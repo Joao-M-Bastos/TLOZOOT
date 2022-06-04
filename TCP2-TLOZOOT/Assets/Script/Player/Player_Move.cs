@@ -9,13 +9,15 @@ public class Player_Move : MonoBehaviour
     public Camera maincamera;
     private Rigidbody rb;
     public Quaternion playerRotation;
-    private Combat playerEntityCombat;
+    private Combat playerCombat;
+    private LockOn lockOn;
 
 
     //Camera
     public float velocidadecamera;
     public float velocidaderotacaocamera;
     public Vector3 CameraOffset;
+    public bool isLocked;
 
     //Walk
     public float speed;
@@ -53,13 +55,22 @@ public class Player_Move : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         baseSpeed = speed;
-        playerEntityCombat = this.gameObject.GetComponent<Combat>();
+        playerCombat = this.gameObject.GetComponent<Combat>();
+        lockOn = this.gameObject.GetComponent<LockOn>();
     }
 
     // Update is called once per frame
     void Update()
     {
         RandomUpdate();
+        
+
+        if(Input.GetKeyDown(KeyCode.LeftControl) && isGround()){
+            isLocked = !isLocked;
+        }
+
+        if(isLocked) this.transform.LookAt(lockOn.LockOnTarget());
+
         playerRotation = new Quaternion(0,transform.rotation.y,0,transform.rotation.w);
 
         InputX = Input.GetAxis("Horizontal");
@@ -73,14 +84,21 @@ public class Player_Move : MonoBehaviour
                 if(isClimb) StopClimb();
             }
 
+            if(playerCombat.isVulnerable){
+                canWalk = true;
+            }else canWalk = false;
+
+
             if(isClimb) Climb();
-            else if(playerEntityCombat.isVulnerable) Walk();
+            else if(canWalk) Walk();
 
         }else{
             anim.SetBool("Walk", false);
         }
 
         if(Input.GetKeyDown(KeyCode.Space)) Jump();
+
+        
 
         maincamera.transform.rotation = Quaternion.Lerp(maincamera.transform.rotation, playerRotation, velocidaderotacaocamera * Time.deltaTime);
     }
@@ -122,14 +140,14 @@ public class Player_Move : MonoBehaviour
 
     void StartClimb(){        
         isClimb = true;
+        isLocked = false;
         rb.useGravity =false;        
     }
 
     void Climb(){
         Vector3 direcaoClimb;
 
-        rb.isKinematic = true;
-        rb.isKinematic = false;
+        ResetKnematic();
 
         playerRotation = Quaternion.LookRotation(-wallHit.normal);
 
@@ -161,16 +179,19 @@ public class Player_Move : MonoBehaviour
 
         direcao = new Vector3(InputX, 0, InputZ);
         
-        var camerarot = maincamera.transform.rotation;
-        camerarot.x = 0;
-        camerarot.z = 0;
-
-        anim.SetBool( "Walk", true );
-
         Run();
 
-        transform.Translate(0, 0, speed * Time.deltaTime);
-        playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direcao)*camerarot, 8 * Time.deltaTime);
+        if(!isLocked){
+            var camerarot = maincamera.transform.rotation;
+            camerarot.x = 0;
+            camerarot.z = 0;
+
+            anim.SetBool( "Walk", true );
+            transform.Translate(0, 0, speed * Time.deltaTime);
+            playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direcao)*camerarot, 8 * Time.deltaTime);
+        }else{
+            transform.Translate(direcao * speed * Time.deltaTime);
+        }
     }
 
     void Jump(){
@@ -194,10 +215,15 @@ public class Player_Move : MonoBehaviour
         RaycastHit groundHit;        
 
         if(Physics.Raycast(transform.position, -transform.up, out groundHit, 0.1f, groundLayerMask)){
-            rb.isKinematic = true;
+            ResetKnematic();
             return true;            
-        }
+        }        
         return false;
+    }
+
+    void ResetKnematic(){
+        rb.isKinematic = true;
+        rb.isKinematic = false;
     }
 
     void Run(){        

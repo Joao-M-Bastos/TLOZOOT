@@ -11,7 +11,7 @@ public class SwordCollider : MonoBehaviour
         if(collision.gameObject.tag == "Enemy"){
             enemyCombat = collision.gameObject.GetComponent<Combat>();
             enemyCombat.TakeKnockback(playerCombat.knockbackforce, playerCombat.transform.TransformDirection(Vector3.forward));
-            enemyCombat.TakeDamege(playerCombat.GiveDamage());            
+            enemyCombat.TakeDamage(playerCombat.GiveDamage());
         }
     }
 }
