@@ -13,6 +13,7 @@ public class Player_Move : MonoBehaviour
     private LockOn lockOn;
 
 
+
     //Camera
     public float velocidadecamera;
     public float velocidaderotacaocamera;
@@ -21,8 +22,6 @@ public class Player_Move : MonoBehaviour
 
     //Walk
     public float speed;
-
-    private bool canWalk;
 
     private static float baseSpeed;
 
@@ -37,18 +36,9 @@ public class Player_Move : MonoBehaviour
 
     //Jump
     public float jumpforce;
+    public bool isInGround;
     private Vector3 jump, jumpC;
     public LayerMask groundLayerMask;
-
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-
-    }
 
     private void Awake()
     {
@@ -84,13 +74,9 @@ public class Player_Move : MonoBehaviour
                 if(isClimb) StopClimb();
             }
 
-            if(playerCombat.isVulnerable){
-                canWalk = true;
-            }else canWalk = false;
-
 
             if(isClimb) Climb();
-            else if(canWalk) Walk();
+            else if(playerCombat.isVulnerable) Walk();
 
         }else{
             anim.SetBool("Walk", false);
@@ -128,13 +114,19 @@ public class Player_Move : MonoBehaviour
     {
         if(collision.gameObject.tag == "Climb"){
             transform.Translate(0,0, -0.1f);            
-        }        
+        }
+        if(collision.gameObject.tag == "Ground"){
+            isInGround = true;
+        }
     }
 
     void OnCollisionExit(Collision collision)
     {
         if(collision.gameObject.tag == "Climb"){
             isInWall = false;
+        }
+        if(collision.gameObject.tag == "Ground"){
+            isInGround = false;
         }
     }
 
@@ -151,7 +143,7 @@ public class Player_Move : MonoBehaviour
 
         playerRotation = Quaternion.LookRotation(-wallHit.normal);
 
-        direcaoClimb = new Vector2(InputX, InputZ);
+        direcaoClimb = new Vector3(InputX, InputZ, 0);
         transform.Translate(direcaoClimb * speedClimb * Time.deltaTime);
     }
 
@@ -165,7 +157,17 @@ public class Player_Move : MonoBehaviour
         float wallLookAngle;
         Vector3 rayStartPos = this.transform.position + new Vector3(0,0.3f,0);
 
-        if(Physics.Raycast(rayStartPos, transform.TransformDirection(Vector3.forward), out wallHit, 0.5f, climbLayerMask) || isInWall){
+        if(Physics.Raycast(rayStartPos, transform.TransformDirection(Vector3.forward), out wallHit, 1.4f, climbLayerMask) || isInWall){
+            return true;
+        }
+        
+        return false;
+    }
+
+    bool isGroundinFront(){
+        Vector3 rayStartPos = this.transform.position + new Vector3(0,1f,0);
+
+        if(Physics.Raycast(rayStartPos, transform.TransformDirection(Vector3.forward), out wallHit, 1.4f, groundLayerMask)){
             return true;
         }
         
@@ -180,6 +182,11 @@ public class Player_Move : MonoBehaviour
         direcao = new Vector3(InputX, 0, InputZ);
         
         Run();
+        
+
+        if(isGroundinFront()){
+            speed = 0;
+        }
 
         if(!isLocked){
             var camerarot = maincamera.transform.rotation;
@@ -212,9 +219,11 @@ public class Player_Move : MonoBehaviour
     }
 
     public bool isGround(){
-        RaycastHit groundHit;        
+        RaycastHit groundHit;
 
-        if(Physics.Raycast(transform.position, -transform.up, out groundHit, 0.1f, groundLayerMask)){
+        Vector3 rayStartPos = this.transform.position + new Vector3(0,1f,0);
+
+        if(Physics.Raycast(rayStartPos, -transform.up, out groundHit, 1f, groundLayerMask) && isInGround){
             ResetKnematic();
             return true;            
         }        
@@ -227,7 +236,7 @@ public class Player_Move : MonoBehaviour
     }
 
     void Run(){        
-        if(Input.GetKey(KeyCode.LeftShift)) {speed = baseSpeed * 2; anim.SetBool("Run", true);}
+        if(Input.GetKey(KeyCode.LeftShift)) {speed = baseSpeed * 1.3f; anim.SetBool("Run", true);}
         else {speed = baseSpeed; anim.SetBool("Run", false);}
     }
 }
