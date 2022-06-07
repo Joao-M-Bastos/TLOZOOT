@@ -12,9 +12,10 @@ public class Player_Attack : MonoBehaviour
 
 
     //Attack
-    public bool canAttack;
+    public bool canAttack, hasAttacked;
     public float atkCooldown;
     public int atkCombo,atkTipo,lastAtkType;
+    public bool hasSword, hasShild;
     
 
     //Charge
@@ -34,7 +35,7 @@ public class Player_Attack : MonoBehaviour
             if(isCharged) attack(3);
             charge = 0;
             isCharged = false;
-        }else if(Input.GetMouseButton(0) && canAttack){
+        }else if(Input.GetMouseButton(0) && canAttack && hasSword){
             attack(getAtkType());
         }
         //HitEnemy(5);
@@ -53,7 +54,6 @@ public class Player_Attack : MonoBehaviour
                 if(charge >= 2){
                     return 4;
                 }
-
                 if(anim.GetBool("Walk") || anim.GetBool("Run")) return 1;
                 else return 2;
             
@@ -66,6 +66,7 @@ public class Player_Attack : MonoBehaviour
     {        
         yield return new WaitForSeconds(atkCooldown);
         canAttack = true;
+        hasAttacked = false;
     }
 
     public void attack(int tipo)
@@ -91,6 +92,7 @@ public class Player_Attack : MonoBehaviour
         lastAtkType = tipo;
 
         canAttack = false;
+        hasAttacked = true;
         StartCoroutine(ResetAttackCooldown());
     }
 }

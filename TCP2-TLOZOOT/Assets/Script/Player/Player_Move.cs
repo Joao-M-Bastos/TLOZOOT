@@ -74,7 +74,6 @@ public class Player_Move : MonoBehaviour
                 if(isClimb) StopClimb();
             }
 
-
             if(isClimb) Climb();
             else if(playerCombat.isVulnerable) Walk();
 
@@ -133,7 +132,8 @@ public class Player_Move : MonoBehaviour
     void StartClimb(){        
         isClimb = true;
         isLocked = false;
-        rb.useGravity =false;        
+        rb.useGravity =false;
+        anim.SetBool("StartClimb", true );
     }
 
     void Climb(){
@@ -149,7 +149,8 @@ public class Player_Move : MonoBehaviour
 
     void StopClimb(){
         isClimb = false;    
-        rb.useGravity = true;    
+        rb.useGravity = true;
+        anim.SetBool("StopClimb", true);
     }
 
     bool canClimb(){
@@ -170,7 +171,6 @@ public class Player_Move : MonoBehaviour
         if(Physics.Raycast(rayStartPos, transform.TransformDirection(Vector3.forward), out wallHit, 1.4f, groundLayerMask)){
             return true;
         }
-        
         return false;
     }
 
@@ -193,7 +193,7 @@ public class Player_Move : MonoBehaviour
             camerarot.x = 0;
             camerarot.z = 0;
 
-            anim.SetBool( "Walk", true );
+            anim.SetBool("Walk", true );
             transform.Translate(0, 0, speed * Time.deltaTime);
             playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direcao)*camerarot, 8 * Time.deltaTime);
         }else{

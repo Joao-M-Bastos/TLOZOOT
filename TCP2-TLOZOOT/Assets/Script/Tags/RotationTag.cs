@@ -8,7 +8,7 @@ public class RotationTag : MonoBehaviour
     void Update()
     {
         if(this.gameObject.tag == "Rotation"){
-            this.transform.Rotate(new Vector3(0, 36, 0) * Time.deltaTime);
+            this.transform.Rotate(new Vector3(0, 0, 36) * Time.deltaTime);
         }
     }
 }

@@ -7,17 +7,12 @@ public class DekuBaba_scpt : MonoBehaviour
     public Player_Move player_Move;
     public Animator animator;
     public Combat combat;
+    public GameObject gameObject;
 
     public bool canAttack;
     public float atkCooldown;
 
     private float distanceFromPlayer;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -45,11 +40,11 @@ public class DekuBaba_scpt : MonoBehaviour
     }
 
     void Behaviour(float distance){
-        if(distance < 10){
+        if(distance < 15){
             this.animator.SetBool("isShown", true);
         }else this.animator.SetBool("isShown", false);
 
-        if(distance < 3 && canAttack){
+        if(distance < 7.5f && canAttack){
             Attack();
         }
     }
@@ -61,7 +56,7 @@ public class DekuBaba_scpt : MonoBehaviour
     }
 
     bool isAttacking(){
-        if (this.animator.GetCurrentAnimatorStateInfo(0).IsName("DekuBaba_Attack"))
+        if (this.animator.GetBool("Attack"))
         {
             return true;
         }

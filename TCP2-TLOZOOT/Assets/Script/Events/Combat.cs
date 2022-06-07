@@ -6,7 +6,7 @@ public class Combat : MonoBehaviour
 {
     public int life, damage;
 
-    public float knockbackforce;
+    public float knockbackforce, dmgModifier;
 
     public bool isKnockbackResistant, isVulnerable;
 
@@ -18,9 +18,10 @@ public class Combat : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage){
+    public void TakeDamage(float damage, float modifier){
         if(isVulnerable){
-            this.life -= damage;
+            damage *= modifier;
+            this.life -= (int)damage;
             isVulnerable = false;
             StartCoroutine(ResetVulnerableCooldown());
         }
