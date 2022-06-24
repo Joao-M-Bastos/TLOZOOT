@@ -12,8 +12,6 @@ public class Player_Move : MonoBehaviour
     private Combat playerCombat;
     private LockOn lockOn;
 
-
-
     //Camera
     public float velocidadecamera;
     public float velocidaderotacaocamera;
@@ -22,9 +20,8 @@ public class Player_Move : MonoBehaviour
 
     //Walk
     public float speed;
-
+    public Vector3 playerForword;
     private static float baseSpeed;
-
     float InputX, InputZ;
 
     //Climb
@@ -52,7 +49,6 @@ public class Player_Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RandomUpdate();
         
 
         if(Input.GetKeyDown(KeyCode.LeftControl) && isGround()){
@@ -62,6 +58,8 @@ public class Player_Move : MonoBehaviour
         if(isLocked) this.transform.LookAt(lockOn.LockOnTarget());
 
         playerRotation = new Quaternion(0,transform.rotation.y,0,transform.rotation.w);
+        
+        playerForword = this.transform.TransformDirection(Vector3.forward);      
 
         InputX = Input.GetAxis("Horizontal");
         InputZ = Input.GetAxis("Vertical");
@@ -78,6 +76,7 @@ public class Player_Move : MonoBehaviour
             else if(playerCombat.isVulnerable) Walk();
 
         }else{
+            ResetSpeed();
             anim.SetBool("Walk", false);
         }
 
@@ -86,12 +85,6 @@ public class Player_Move : MonoBehaviour
         
 
         maincamera.transform.rotation = Quaternion.Lerp(maincamera.transform.rotation, playerRotation, velocidaderotacaocamera * Time.deltaTime);
-    }
-
-    private void RandomUpdate(){
-        if(Random.Range(0f, 60.0f) > 59){
-            isGround();
-        }
     }
 
     private void LateUpdate()
@@ -139,12 +132,10 @@ public class Player_Move : MonoBehaviour
     void Climb(){
         Vector3 direcaoClimb;
 
-        ResetKnematic();
-
         playerRotation = Quaternion.LookRotation(-wallHit.normal);
 
-        direcaoClimb = new Vector3(InputX, InputZ, 0);
-        transform.Translate(direcaoClimb * speedClimb * Time.deltaTime);
+        direcaoClimb = new Vector3(InputX, -InputZ, 0);
+        this.rb.velocity = direcaoClimb * -speedClimb;
     }
 
     void StopClimb(){
@@ -165,37 +156,26 @@ public class Player_Move : MonoBehaviour
         return false;
     }
 
-    bool isGroundinFront(){
-        Vector3 rayStartPos = this.transform.position + new Vector3(0,1f,0);
-
-        if(Physics.Raycast(rayStartPos, transform.TransformDirection(Vector3.forward), out wallHit, 1.4f, groundLayerMask)){
-            return true;
-        }
-        return false;
-    }
-
 
 
     void Walk(){
-        Vector3 direcao;
+        Vector3 velocityWalk;
 
-        direcao = new Vector3(InputX, 0, InputZ);
+        var direcao = new Vector3(InputX, 0, InputZ);
+
+        velocityWalk = playerForword * speed;
+        velocityWalk.y = rb.velocity.y;
         
         Run();
-        
-
-        if(isGroundinFront()){
-            speed = 0;
-        }
 
         if(!isLocked){
-            var camerarot = maincamera.transform.rotation;
+            var camerarot = this.transform.rotation;
             camerarot.x = 0;
             camerarot.z = 0;
 
             anim.SetBool("Walk", true );
-            transform.Translate(0, 0, speed * Time.deltaTime);
-            playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direcao)*camerarot, 8 * Time.deltaTime);
+            this.rb.velocity = velocityWalk;
+            playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direcao)*camerarot, 3 * Time.deltaTime);
         }else{
             transform.Translate(direcao * speed * Time.deltaTime);
         }
@@ -207,7 +187,6 @@ public class Player_Move : MonoBehaviour
             {
                 rb.isKinematic = false;
                 rb.AddForce(transform.up * jumpforce, ForceMode.Impulse);
-                //anim.SetBool("Jump", true);
             }
         }else{
             if(!isGround()){
@@ -224,15 +203,18 @@ public class Player_Move : MonoBehaviour
         Vector3 rayStartPos = this.transform.position + new Vector3(0,1f,0);
 
         if(Physics.Raycast(rayStartPos, -transform.up, out groundHit, 1f, groundLayerMask) && isInGround){
-            ResetKnematic();
             return true;            
         }        
         return false;
     }
 
-    void ResetKnematic(){
-        rb.isKinematic = true;
-        rb.isKinematic = false;
+    void ResetSpeed(){
+        Vector3 velocityWalk;
+
+        velocityWalk = playerForword * Time.deltaTime;
+        velocityWalk.y = rb.velocity.y;
+
+        this.rb.velocity = velocityWalk;
     }
 
     void Run(){        
