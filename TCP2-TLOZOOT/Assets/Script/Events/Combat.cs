@@ -33,8 +33,8 @@ public class Combat : MonoBehaviour
 
     public void TakeKnockback(float knockbackforce, Vector3 diretion){
         if(!isKnockbackResistant && isVulnerable){
-            rb.isKinematic = false;
-            rb.AddForce(transform.up * knockbackforce, ForceMode.VelocityChange);
+            this.rb.velocity = new Vector3(0,0,0);
+            rb.AddForce(transform.up * knockbackforce / 2, ForceMode.VelocityChange);
             rb.AddForce(diretion * knockbackforce, ForceMode.VelocityChange);
         }
     }

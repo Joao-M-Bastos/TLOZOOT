@@ -6,18 +6,11 @@ public class dialogueNPC : MonoBehaviour
 {
     [SerializeField]
     GameObject player;
-    public Player_Attack playerAttack;
+    public Player_Scp instaciaPlayer;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+    private void Awake() {
+        this.instaciaPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Scp>();
+        this.player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void OnTriggerEnter(Collider other)
@@ -49,7 +42,7 @@ public class dialogueNPC : MonoBehaviour
             Debug.Log("\"Good job! Here's your Deku Shield!\"");
             Debug.Log("QUEST COMPLETED: Generic Quest");
             varHolder.inst.flagNPCDialogue4 = true;
-            playerAttack.hasShild = true;
+            this.instaciaPlayer.HasShild = true;
         }
     }
 }

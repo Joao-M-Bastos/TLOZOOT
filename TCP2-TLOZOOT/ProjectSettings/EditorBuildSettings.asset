@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/LinkHouse.unity
+    guid: 2fc702f6e5d21ed4cb5e1c4252ae114e
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Inside Deku.unity
+    guid: d573b6805efbbbc45b99c2ef939bd634
   m_configObjects: {}

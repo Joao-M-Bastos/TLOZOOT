@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class DmgCollider : MonoBehaviour
 {
+    public Player_Scp instaciaPlayer;
     private Combat playerCombat;
     public Combat enemyCombat;
+
+    private void Awake() {
+        this.instaciaPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Scp>();
+        this.playerCombat = GameObject.FindGameObjectWithTag("Player").GetComponent<Combat>();
+    }
     
-    public void OnTriggerEnter(Collider collision){
+    public void OnTriggerStay(Collider collision){
         if(collision.gameObject.tag == "Player"){
-            playerCombat = collision.gameObject.GetComponent<Combat>();
-            playerCombat.TakeKnockback(enemyCombat.knockbackforce, -playerCombat.transform.TransformDirection(Vector3.forward));
+            playerCombat = collision.gameObject.GetComponent<Combat>();            
+            playerCombat.TakeKnockback(enemyCombat.knockbackforce, this.transform.TransformDirection(Vector3.forward));
             playerCombat.TakeDamage(enemyCombat.GiveDamage(), enemyCombat.dmgModifier);
         }
     }

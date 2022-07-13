@@ -8,6 +8,10 @@ TagManager:
   - Enemy
   - Ground
   - LockOnTarget
+  - Climb
+  - Text
+  - StartingPosition
+  - doNotRepeat
   layers:
   - Default
   - TransparentFX

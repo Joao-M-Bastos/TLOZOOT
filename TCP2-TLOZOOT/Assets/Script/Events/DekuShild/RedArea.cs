@@ -7,10 +7,8 @@ public class RedArea : MonoBehaviour
     [SerializeField]
     GameObject player;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private void Awake() {
+        this.player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame

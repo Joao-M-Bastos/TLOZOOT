@@ -14,6 +14,10 @@ public class DekuBaba_scpt : MonoBehaviour
 
     private float distanceFromPlayer;
 
+    private void Awake() {
+        this.player_Move = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Move>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -28,7 +32,7 @@ public class DekuBaba_scpt : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-    }    
+    }
 
     void LookAtPlayer(){
         this.transform.LookAt(player_Move.transform);
