@@ -10,16 +10,13 @@ public class Player_Scp : MonoBehaviour
     public static Player_Scp instaciaPlayer;
     public Animator prefebAnim;
     private Animator parentAnim;
-    public Camera maincamera;
+    private CameraManegement cameraManegement;
     private Rigidbody rb;
     private Quaternion playerRotation;
     public Combat playerCombat;
     private LockOn lockOn;
 
     //Camera
-    public float velocidadecamera;
-    public float velocidaderotacaocamera;
-    public Vector3 CameraOffset;
     private bool isLocked;
 
     //Walk
@@ -51,6 +48,7 @@ public class Player_Scp : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerCombat = this.gameObject.GetComponent<Combat>();
         lockOn = this.gameObject.GetComponent<LockOn>();
+        cameraManegement = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraManegement>();
         this.IsInCorner = false;
     }
 
@@ -86,16 +84,11 @@ public class Player_Scp : MonoBehaviour
             PlayerRotation = new Quaternion(0,transform.rotation.y,0,transform.rotation.w);
         }
         //Rotaciona a Camera
-        maincamera.transform.rotation = Quaternion.Lerp(maincamera.transform.rotation, PlayerRotation, velocidaderotacaocamera * Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        //Move a camera
-        var pos = transform.position - maincamera.transform.forward * CameraOffset.z + maincamera.transform.up * CameraOffset.y + maincamera.transform.right * CameraOffset.x;
-        maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, pos, velocidadecamera * Time.deltaTime);
-        
-        
+        this.cameraManegement.CameraUpdate();
         //Rotaciona o jogador caso algo no codigo altere a rotação
         transform.rotation = PlayerRotation;
     }
