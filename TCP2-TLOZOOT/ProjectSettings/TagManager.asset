@@ -12,6 +12,7 @@ TagManager:
   - Text
   - StartingPosition
   - doNotRepeat
+  - Water
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Ground
   - Enemy
   - 
-  - 
+  - Water
   - 
   - 
   - 

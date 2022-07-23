@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Player_Scp : MonoBehaviour
 {
-    
-
     //Instacias
-    public static Player_Scp instaciaPlayer;
     public Animator prefebAnim;
     private Animator parentAnim;
     private CameraManegement cameraManegement;
     private Rigidbody rb;
     private Quaternion playerRotation;
-    public Combat playerCombat;
-    private LockOn lockOn;
+    private Combat playerCombat;
+    public SkinnedMeshRenderer meshRenderer;
+
+    //Shoot
+    public bool isAiming;
 
     //Camera
     private bool isLocked;
@@ -24,6 +24,11 @@ public class Player_Scp : MonoBehaviour
     private Vector3 playerForword;
     private Vector3 playerRight;
 
+    //Swim
+    private bool isSwiming;
+    public LayerMask waterLayerMask;
+    private bool isinWater;
+    private RaycastHit swimHit;
 
     //Climb
     private bool isClimb, isInWall, isInCorner, isInCornerAnimation;
@@ -45,9 +50,8 @@ public class Player_Scp : MonoBehaviour
     private void Awake()
     {
         this.ParentAnim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();        
         playerCombat = this.gameObject.GetComponent<Combat>();
-        lockOn = this.gameObject.GetComponent<LockOn>();
         cameraManegement = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraManegement>();
         this.IsInCorner = false;
     }
@@ -61,29 +65,19 @@ public class Player_Scp : MonoBehaviour
                 this.transform.position = obj.transform.position;
             }
         }
-
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if(this.Rb.useGravity == true){
+        if(this.Rb.useGravity == true && !IsGrounded()){
             //Almenta força da gravidade
-            this.Rb.AddForce(0, -10, 0);
-
+            this.Rb.AddForce(0, -9, 0);
         }
-
-        //Liga desliga LockOn
-        if(Input.GetKeyDown(KeyCode.LeftControl) && isGrounded()){
-            IsLocked = !IsLocked;
+        else if(IsSwiming)
+        {
+            this.Rb.AddForce(0, 4, 0);
         }
-
-        //Trava a visão no alvo
-        if(isLocked){
-            this.transform.LookAt(lockOn.LockOnTarget());
-            PlayerRotation = new Quaternion(0,transform.rotation.y,0,transform.rotation.w);
-        }
-        //Rotaciona a Camera
     }
 
     private void LateUpdate()
@@ -96,7 +90,8 @@ public class Player_Scp : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         //Verifica se o jogador pode escalar
-        if(collision.gameObject.tag == "Climb"){
+        if(collision.gameObject.CompareTag("Climb"))
+        {
             isInWall = true;
         }
     }
@@ -104,13 +99,15 @@ public class Player_Scp : MonoBehaviour
     void OnCollisionStay(Collision collision)
     {
         //Verifica se o jogador esta encostando na parede
-        if(collision.gameObject.tag == "Climb"){
+        if(collision.gameObject.CompareTag("Climb"))
+        {
             //Se ele esta encostando na parede ele volta um pouco para evitar bugs de collider
             transform.Translate(0,0, -0.1f);            
         }
 
         //Verifica se esta no chao
-        if(collision.gameObject.tag == "Ground"){
+        if(collision.gameObject.CompareTag("Ground"))
+        {
             isInGround = true;
         }
     }
@@ -118,18 +115,18 @@ public class Player_Scp : MonoBehaviour
     void OnCollisionExit(Collision collision)
     {
         //Se sair da parede ou chão ele anota
-        if(collision.gameObject.tag == "Climb"){
+        if(collision.gameObject.CompareTag("Climb"))
+        {
             isInWall = false;
         }
-        if(collision.gameObject.tag == "Ground"){
+        if(collision.gameObject.CompareTag("Ground"))
+        {
             isInGround = false;
         }
     }
     
-    public bool canClimb(){
+    public bool CanClimb(){
         //Verifica se há uma parede escalavel a frente
-
-        RaycastHit climbRayValue;
 
         Vector3 rayStartPos = this.transform.position + new Vector3(0,0.4f,0);
 
@@ -140,32 +137,68 @@ public class Player_Scp : MonoBehaviour
         return false;
     }    
 
-    public bool canWalk(){
-        if(!playerCombat.isVulnerable || IsInCornerAnimation || this.HasAttacked){
+    public bool CanWalk(){
+        if(!PlayerCombat.isVulnerable || IsInCornerAnimation){
+            this.IsLocked = false;
+            return false;
+        }else if(this.HasAttacked){
             return false;
         }
-        
+
         return true;
     }
 
-    public bool isGrounded(){
-        RaycastHit groundHit;
+    public bool CanTurn(){
+        if(IsLocked){
+            this.IsLocked = false;
+            return false;
+        }
 
-        Vector3 rayStartPos = this.transform.position + new Vector3(0,1f,0);
+        return true;
+    }
 
-        if(Physics.Raycast(rayStartPos, -transform.up, out groundHit, 1.4f, groundLayerMask) && isInGround){
-            return true;            
-        }        
+    public bool IsGrounded(){
+
+        Vector3 rayStartPos = this.transform.position + new Vector3(0, 1f, 0);
+        if (Physics.Raycast(rayStartPos, -transform.up, out _, 1.4f, groundLayerMask) && isInGround){
+            return true;
+        }
+        return false;
+    }
+
+    public bool CanSwim(){
+
+        Vector3 rayStartPos = this.transform.position + new Vector3(0, 12f, 0);
+
+        Debug.DrawRay(rayStartPos, -this.transform.up * 10f, Color.red);
+        if (Physics.Raycast(rayStartPos, -this.transform.up, out swimHit, 10f, this.waterLayerMask)){
+            return true;
+        }
         return false;
     }
 
     public void StopClimbCorner(){
+        this.transform.Translate(new Vector3(0, 4, 1.5f));
         this.IsInCorner = false;
         this.Rb.isKinematic = false;
     }
 
-    
+    public void ResetSpeed(){
+        Vector3 velocityWalk;
 
+        velocityWalk = PlayerForword * Time.deltaTime;
+        velocityWalk.y = Rb.velocity.y;
+
+        if(Rb.velocity.x < 0.01f || IsClimb){
+            velocityWalk = new Vector3(0,velocityWalk.y,0);
+        }
+
+        Rb.velocity = velocityWalk;
+    }
+
+    public float DistanceFromPlayer(Vector3 objTransform){
+        return Vector3.Distance(objTransform, this.transform.position);
+    }
 
     //GETS AND SETS -----------------------------//
     public Quaternion PlayerRotation{
@@ -208,6 +241,12 @@ public class Player_Scp : MonoBehaviour
         get{return this.hasSword;}
     }
 
+    public bool IsAiming
+    {
+        set { this.isAiming = value; }
+        get { return this.isAiming; }
+    }
+
     public bool IsLocked{
         set{this.isLocked = value;}
         get{return this.isLocked;}
@@ -218,9 +257,19 @@ public class Player_Scp : MonoBehaviour
         get{return this.isInCorner;}
     }
 
-        public bool IsInCornerAnimation{
+    public bool IsInCornerAnimation{
         set{this.isInCornerAnimation = value;}
         get{return this.isInCornerAnimation;}
+    }
+
+    public bool IsinWater{
+        set{this.isinWater = value;}
+        get{return this.isinWater;}
+    }
+    
+    public bool IsSwiming{
+        set{this.isSwiming = value;}
+        get{return this.isSwiming;}
     }
 
     public float Speed{
@@ -248,6 +297,12 @@ public class Player_Scp : MonoBehaviour
         get{return this.wallHit;}
     }
 
+    public RaycastHit SwimHit
+    {
+        set { this.swimHit = value; }
+        get { return this.swimHit; }
+    }
+
     public LayerMask ClimbLayerMask{
         set{this.climbLayerMask = value;}
         get{return this.climbLayerMask;}
@@ -256,5 +311,15 @@ public class Player_Scp : MonoBehaviour
     public LayerMask GroundLayerMask{
         set{this.groundLayerMask = value;}
         get{return this.groundLayerMask;}
+    }
+    
+    public LayerMask WaterLayerMask{
+        set{this.waterLayerMask = value;}
+        get{return this.waterLayerMask;}
+    }
+    
+    public Combat PlayerCombat{
+        set{this.playerCombat = value;}
+        get{return this.playerCombat;}
     }
 }

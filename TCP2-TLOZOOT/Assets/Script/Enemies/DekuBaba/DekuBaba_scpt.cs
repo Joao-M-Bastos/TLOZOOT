@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DekuBaba_scpt : MonoBehaviour
 {
-    public Player_Move player_Move;
+    public Player_Scp instaciaPlayer;
     public Animator animator;
     public Combat combat;
     public GameObject gameObject;
@@ -15,15 +15,14 @@ public class DekuBaba_scpt : MonoBehaviour
     private float distanceFromPlayer;
 
     private void Awake() {
-        this.player_Move = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Move>();
+        this.instaciaPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Scp>();       
     }
 
     // Update is called once per frame
     void Update()
     {
-        distanceFromPlayer = PlayerDistance();
-        Behaviour(distanceFromPlayer);
-
+        Behaviour(this.instaciaPlayer.DistanceFromPlayer(this.transform.position));
+        
         if(!isAttacking()){
             LookAtPlayer();
         }
@@ -35,12 +34,12 @@ public class DekuBaba_scpt : MonoBehaviour
     }
 
     void LookAtPlayer(){
-        this.transform.LookAt(player_Move.transform);
+        this.transform.LookAt(instaciaPlayer.transform);
         this.transform.rotation = new Quaternion(0,this.transform.rotation.y,0,this.transform.rotation.w);
     }
 
     float PlayerDistance(){
-        return Vector3.Distance(this.transform.position, player_Move.transform.position);
+        return Vector3.Distance(this.transform.position, instaciaPlayer.transform.position);
     }
 
     void Behaviour(float distance){

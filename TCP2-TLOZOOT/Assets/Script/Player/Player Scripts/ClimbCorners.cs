@@ -8,16 +8,15 @@ public class ClimbCorners : MonoBehaviour
 
     private RaycastHit rayFrontal;
     private RaycastHit rayAcima;
-    private RaycastHit rayAcimaFrontal;    
+    private RaycastHit rayAcimaFrontal;
 
     private void Update() {
         //if(instaciaPlayer.IsInCorner){
-            canClimbCorner();
+            CanClimbCorner();
         //}
     }
 
-    public void canClimbCorner(){
-        
+    public void CanClimbCorner(){
         if(!RayAcimaFrontal()){
             if(RayFrontal() && RayAcima()){
                 GetInCorner();
@@ -75,8 +74,7 @@ public class ClimbCorners : MonoBehaviour
 
             Vector3 playerPos;
             playerPos = this.instaciaPlayer.Rb.transform.position;
-
-            
+                        
             playerPos.y = this.rayAcima.point.y - 4;
 
             this.instaciaPlayer.Rb.transform.position = playerPos;

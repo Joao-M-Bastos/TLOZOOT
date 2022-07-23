@@ -16,14 +16,9 @@ public class SceaneLoader : MonoBehaviour
         this.instaciaPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Scp>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerStay(Collider collision) {
-        if(collision.gameObject.tag == "Player"){
+        if(collision.gameObject.CompareTag("Player"))
+        {
             LoadSceane();
         }
     }
