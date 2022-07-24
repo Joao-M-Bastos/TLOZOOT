@@ -68,15 +68,15 @@ public class Player_Scp : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate ()
     {
         if(this.Rb.useGravity == true && !IsGrounded()){
             //Almenta força da gravidade
-            this.Rb.AddForce(0, -9, 0);
+            this.Rb.AddForce(0, -25, 0);
         }
         else if(IsSwiming)
         {
-            this.Rb.AddForce(0, 4, 0);
+            this.Rb.AddForce(0, 6, 0);
         }
     }
 
@@ -170,7 +170,7 @@ public class Player_Scp : MonoBehaviour
 
         Vector3 rayStartPos = this.transform.position + new Vector3(0, 12f, 0);
 
-        Debug.DrawRay(rayStartPos, -this.transform.up * 10f, Color.red);
+        
         if (Physics.Raycast(rayStartPos, -this.transform.up, out swimHit, 10f, this.waterLayerMask)){
             return true;
         }

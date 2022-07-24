@@ -8,8 +8,7 @@ public class Player_Attack : MonoBehaviour
     public LayerMask enemyLayerMask;
     public Animator slingshotAnimator;
 
-    public MeshRenderer slingshotMesh;
-    public MeshRenderer slingshotGomaMesh;
+
 
     //Attack
     public bool canAttack;
@@ -29,7 +28,7 @@ public class Player_Attack : MonoBehaviour
 
     void Awake()
     {
-        SlingShotRender(false);
+
         canAttack = true;
         charge = 0;
         chargeRenged = 0;
@@ -41,7 +40,6 @@ public class Player_Attack : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {            
             this.instaciaPlayer.IsAiming = !this.instaciaPlayer.IsAiming;
-            SlingShotRender(this.instaciaPlayer.IsAiming);
         }
 
         if (this.instaciaPlayer.isAiming)
@@ -150,10 +148,6 @@ public class Player_Attack : MonoBehaviour
         this.chargeRenged = 0;
     }
 
-    public void SlingShotRender(bool valor)
-    {
-        slingshotMesh.enabled = valor;
-        slingshotGomaMesh.enabled = valor;
-    }
+
 }
 

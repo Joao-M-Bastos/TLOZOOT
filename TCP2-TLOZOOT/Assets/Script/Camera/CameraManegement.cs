@@ -6,6 +6,11 @@ public class CameraManegement : MonoBehaviour
 {
     public Player_Scp instaciaPlayer;
 
+    public MeshRenderer slingshotMesh;
+    public MeshRenderer slingshotGomaMesh;
+    public SkinnedMeshRenderer hairMesh;
+    public SkinnedMeshRenderer hatMesh;
+
     public float velocidadecamera;
     public float velocidaderotacaocamera;
     private Vector3 cPosition;
@@ -20,6 +25,7 @@ public class CameraManegement : MonoBehaviour
     private void Awake() {
         this.lockOn = GetComponent<LockOn>();
         this.lockOn.PlayerTransform = this.instaciaPlayer.transform;
+        ObjRender(false);
         cameraOffset = baseCameraOffset;
     }
 
@@ -42,9 +48,11 @@ public class CameraManegement : MonoBehaviour
         CheckWalls(CPosition);
 
         if (CheckFP())
-        {
+        {            
             this.CPosition = pPosition + transform.forward * 0.85f + transform.up * 1.2f;            
         }
+
+        ObjRender(CheckFP());
 
         this.transform.position = Vector3.Lerp(this.transform.position, CPosition, velocidadecamera * Time.deltaTime);
 
@@ -85,6 +93,23 @@ public class CameraManegement : MonoBehaviour
     public Vector3 CPosition{
         set{this.cPosition = value;}
         get{return this.cPosition;}
+    }
+
+    public void ObjRender(bool valor)
+    {
+        if (this.instaciaPlayer.IsAiming)
+        {
+            slingshotMesh.enabled = true;
+            slingshotGomaMesh.enabled = true;
+        }
+        else
+        {
+            slingshotMesh.enabled = false;
+            slingshotGomaMesh.enabled = false;
+        }
+
+        hairMesh.enabled = !valor;
+        hatMesh.enabled = !valor;
     }
 
 }
