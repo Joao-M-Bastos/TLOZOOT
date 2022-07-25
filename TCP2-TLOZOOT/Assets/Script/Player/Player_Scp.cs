@@ -5,16 +5,17 @@ using UnityEngine;
 public class Player_Scp : MonoBehaviour
 {
     //Instacias
-    public Animator prefebAnim;
+    public PreFabAnimato prefebAnimScp;
     private Animator parentAnim;
     private CameraManegement cameraManegement;
     private Rigidbody rb;
     private Quaternion playerRotation;
     private Combat playerCombat;
-    public SkinnedMeshRenderer meshRenderer;
+    //public SkinnedMeshRenderer meshRenderer;
 
     //Shoot
-    public bool isAiming;
+    private bool isAiming;
+    private bool canShoot;
 
     //Camera
     private bool isLocked;
@@ -59,10 +60,13 @@ public class Player_Scp : MonoBehaviour
     private void OnLevelWasLoaded(int i){
         StartingPositionObj = GameObject.FindGameObjectsWithTag("StartingPosition");
 
+        this.ResetSpeed();
+
         foreach (GameObject obj in StartingPositionObj)
         {
             if(obj.GetComponent<StartingCode>() != null && obj.GetComponent<StartingCode>().startingCode == startingPosCode){
                 this.transform.position = obj.transform.position;
+                this.transform.rotation = obj.transform.rotation;
             }
         }
     }
@@ -102,7 +106,7 @@ public class Player_Scp : MonoBehaviour
         if(collision.gameObject.CompareTag("Climb"))
         {
             //Se ele esta encostando na parede ele volta um pouco para evitar bugs de collider
-            transform.Translate(0,0, -0.1f);            
+            transform.Translate(0,0, -0.1f);
         }
 
         //Verifica se esta no chao
@@ -138,7 +142,7 @@ public class Player_Scp : MonoBehaviour
     }    
 
     public bool CanWalk(){
-        if(!PlayerCombat.isVulnerable || IsInCornerAnimation){
+        if(!PlayerCombat.isVulnerable || IsInCornerAnimation || this.IsDiving()){
             this.IsLocked = false;
             return false;
         }else if(this.HasAttacked){
@@ -153,7 +157,6 @@ public class Player_Scp : MonoBehaviour
             this.IsLocked = false;
             return false;
         }
-
         return true;
     }
 
@@ -166,11 +169,27 @@ public class Player_Scp : MonoBehaviour
         return false;
     }
 
+    public bool IsDiving()
+    {
+
+        Vector3 rayStartPos = this.transform.position + new Vector3(0, 11.3f, 0);
+
+        if (Physics.Raycast(rayStartPos, -this.transform.up, out swimHit, 10f, this.waterLayerMask))
+        {
+
+            if(Vector3.Distance(this.transform.position, this.SwimHit.point) > 3 && IsinWater)
+            {
+                this.ResetSpeed();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public bool CanSwim(){
 
-        Vector3 rayStartPos = this.transform.position + new Vector3(0, 12f, 0);
-
-        
+        Vector3 rayStartPos = this.transform.position + new Vector3(0, 11.3f, 0);
+                
         if (Physics.Raycast(rayStartPos, -this.transform.up, out swimHit, 10f, this.waterLayerMask)){
             return true;
         }
@@ -178,7 +197,8 @@ public class Player_Scp : MonoBehaviour
     }
 
     public void StopClimbCorner(){
-        this.transform.Translate(new Vector3(0, 4, 1.5f));
+        this.PrefebAnimScp.ResetAllAnimations();
+        this.IsInCornerAnimation = false;
         this.IsInCorner = false;
         this.Rb.isKinematic = false;
     }
@@ -247,6 +267,12 @@ public class Player_Scp : MonoBehaviour
         get { return this.isAiming; }
     }
 
+    public bool CanShoot
+    {
+        set { this.canShoot = value; }
+        get { return this.canShoot; }
+    }
+
     public bool IsLocked{
         set{this.isLocked = value;}
         get{return this.isLocked;}
@@ -277,9 +303,10 @@ public class Player_Scp : MonoBehaviour
         get{return this.speed;}
     }
 
-    public Animator PrefebAnim{
-        set{this.prefebAnim = value;}
-        get{return this.prefebAnim;}
+    public PreFabAnimato PrefebAnimScp
+    {
+        set{this.prefebAnimScp = value;}
+        get{return this.prefebAnimScp;}
     }
     
     public Animator ParentAnim{

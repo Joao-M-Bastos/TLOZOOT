@@ -21,7 +21,6 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-
             enemyCombat = collision.gameObject.GetComponent<Combat>();
             enemyCombat.TakeKnockback(playerCombat.knockbackforce, playerCombat.transform.TransformDirection(Vector3.forward));
             enemyCombat.TakeDamage(playerCombat.GiveDamage(), playerCombat.dmgModifier);

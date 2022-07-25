@@ -42,9 +42,9 @@ public class Player_Attack : MonoBehaviour
             this.instaciaPlayer.IsAiming = !this.instaciaPlayer.IsAiming;
         }
 
-        if (this.instaciaPlayer.isAiming)
+        if (this.instaciaPlayer.IsAiming)
         {
-            if (Input.GetButton("Fire1"))
+            if (Input.GetButton("Fire1") && this.instaciaPlayer.CanShoot)
             {
                 ShootCharge();
             }
@@ -52,14 +52,21 @@ public class Player_Attack : MonoBehaviour
             {
                 Shoot();
             }
-        }else if(Input.GetMouseButtonUp(0)){
+        }else if (Input.GetMouseButtonDown(1) && this.instaciaPlayer.HasShild){
+            Block();
+        }else if (Input.GetMouseButtonUp(0)){
             if(isCharged) Attack(3);
             charge = 0;
             isCharged = false;
         }else if(Input.GetMouseButtonDown(0) && canAttack && this.instaciaPlayer.HasSword){
             Attack(GetAtkType());
         }
-        //HitEnemy(5);
+
+        if (Input.GetMouseButtonUp(1) && this.instaciaPlayer.PrefebAnimScp.IsBlocking)
+        {
+            UnBlock();
+        }
+
     }
 
     public int GetAtkType(){
@@ -74,7 +81,7 @@ public class Player_Attack : MonoBehaviour
                 if(charge >= 2){
                     return 4;
                 }
-                if(this.instaciaPlayer.PrefebAnim.GetBool("Walk") || this.instaciaPlayer.PrefebAnim.GetBool("Run")) return 1;
+                if(this.instaciaPlayer.PrefebAnimScp.IsWalking) return 1;
                 else return 2;
             
             }else return 5;
@@ -89,12 +96,26 @@ public class Player_Attack : MonoBehaviour
         this.instaciaPlayer.HasAttacked = false;
     }
 
+    public void Block()
+    {
+        this.instaciaPlayer.ResetSpeed();
+        this.instaciaPlayer.PrefebAnimScp.ResetAllAnimations();
+        this.instaciaPlayer.PrefebAnimScp.IsBlocking = true;
+        this.instaciaPlayer.PlayerCombat.isVulnerable = false;
+    }
+
+    void UnBlock()
+    {
+        this.instaciaPlayer.PrefebAnimScp.IsBlocking = false;
+        this.instaciaPlayer.PlayerCombat.isVulnerable = true;
+    }
+
     public void Attack(int tipo)
     {
         if(tipo == lastAtkType) atkCombo++;
         else atkCombo = 0;
 
-        this.instaciaPlayer.PrefebAnim.SetBool("Attack", true);
+        this.instaciaPlayer.PrefebAnimScp.TrigAttack = true;
 
 
         switch (tipo)

@@ -52,19 +52,18 @@ public class Player_Move : MonoBehaviour
                     if(this.instaciaPlayer.IsClimb || this.instaciaPlayer.IsGrounded()){
                         this.instaciaPlayer.ResetSpeed();
                     }
-                    this.instaciaPlayer.PrefebAnim.SetBool("Walk", false);
+                    this.instaciaPlayer.PrefebAnimScp.IsWalking = false;
                 }
             }
-        }else this.instaciaPlayer.PrefebAnim.SetBool("Walk", false);
-        
-        if(this.instaciaPlayer.HasAttacked){
+        }else this.instaciaPlayer.PrefebAnimScp.IsWalking = false;
+
+        if (this.instaciaPlayer.HasAttacked){
             this.instaciaPlayer.ResetSpeed();
         }
 
 
         //Pulo
         if(Input.GetKeyDown(KeyCode.Space)) Jump();
-        //if(this.instaciaPlayer.isGrounded()) this.instaciaPlayer.ResetSpeed();
     }
 
 
@@ -82,18 +81,28 @@ public class Player_Move : MonoBehaviour
     }
 
     void Corner(){
-        if(Input.GetKeyDown(KeyCode.W)){            
-            this.instaciaPlayer.StopClimbCorner();
+        this.instaciaPlayer.PrefebAnimScp.ResetAllAnimations();
+
+        this.instaciaPlayer.PrefebAnimScp.IsInCorner = true;
+
+        if (Input.GetKeyDown(KeyCode.W) && this.instaciaPlayer.IsInCornerAnimation == false)
+        {
             this.instaciaPlayer.ParentAnim.SetBool("ClimbCorner", true);
+
             this.instaciaPlayer.IsInCornerAnimation = true;
+
+            //this.instaciaPlayer.StopClimbCorner();
+
             this.StartCoroutine(ResetCornerAnimation());
+
+            this.transform.Translate(new Vector3(0, 3.1f, 1.5f));
         }
     }
 
     IEnumerator ResetCornerAnimation()
     {
-        yield return new WaitForSeconds(1);
-        this.instaciaPlayer.IsInCornerAnimation = false;
+        yield return new WaitForSeconds(0.8f);
+        this.instaciaPlayer.StopClimbCorner();
     }
 
     void StartClimb(){
@@ -101,7 +110,10 @@ public class Player_Move : MonoBehaviour
         this.instaciaPlayer.IsClimb = true;
         this.instaciaPlayer.IsLocked = false;
         this.instaciaPlayer.Rb.useGravity = false;
-        this.instaciaPlayer.PrefebAnim.SetTrigger("StartClimb");
+
+        this.instaciaPlayer.PrefebAnimScp.ResetAllAnimations();
+
+        this.instaciaPlayer.PrefebAnimScp.IsClimbing = true;
     }
 
     void Climb(){
@@ -124,7 +136,8 @@ public class Player_Move : MonoBehaviour
         //Limpa as variaves quando parar de escalar
         this.instaciaPlayer.IsClimb = false;
         this.instaciaPlayer.Rb.useGravity = true;
-        this.instaciaPlayer.PrefebAnim.SetBool("StopClimb", true);
+
+        this.instaciaPlayer.PrefebAnimScp.IsClimbing = false;
     }
 
     void Walk(){
@@ -143,8 +156,6 @@ public class Player_Move : MonoBehaviour
             velocityWalk += this.instaciaPlayer.PlayerRight * this.instaciaPlayer.Speed * InputX;
             velocityWalk *= 0.40f;
 
-            //this.instaciaPlayer.transform.Translate(direcao * this.instaciaPlayer.Speed * Time.deltaTime / 2);
-
         }
         else{
             //Se não está travado a camera rotaciona
@@ -154,9 +165,9 @@ public class Player_Move : MonoBehaviour
 
             if (velocityWalk.x != 0 && velocityWalk.z != 0)
             {
-                this.instaciaPlayer.PrefebAnim.SetBool("Walk", true);
+                this.instaciaPlayer.PrefebAnimScp.IsWalking = true;
             }
-            else this.instaciaPlayer.PrefebAnim.SetBool("Walk", false);
+            else this.instaciaPlayer.PrefebAnimScp.IsWalking = false;
 
             //Rotaciona o jogador
             this.instaciaPlayer.PlayerRotation = Quaternion.Lerp(this.instaciaPlayer.PlayerRotation, Quaternion.LookRotation(direcao) * camerarot, 2f * Time.deltaTime);
@@ -177,7 +188,6 @@ public class Player_Move : MonoBehaviour
         if(this.instaciaPlayer.IsInCorner){
             jumpforceAlterTransform = jumpforce * -0.1f;            
             this.instaciaPlayer.StopClimbCorner();
-
         }
         
         else if(this.instaciaPlayer.IsClimb && !this.instaciaPlayer.IsGrounded()){
@@ -185,22 +195,24 @@ public class Player_Move : MonoBehaviour
             StopClimb();
         }
         
-        else if (this.instaciaPlayer.IsGrounded()){
+        else if (this.instaciaPlayer.IsGrounded() && !this.instaciaPlayer.IsinWater){
             jumpforceAlterForce = jumpforce;
             jumpDirection = transform.up;
         }
         
         else if (CanDive())
         {
-            jumpforceAlterForce = jumpforce;
+            jumpforceAlterForce = jumpforce/2;
             jumpDirection = -transform.up;
-
+            
         }
+
+        this.instaciaPlayer.Rb.isKinematic = false;
 
         this.instaciaPlayer.transform.Translate(0, 0, jumpforceAlterTransform);
         this.instaciaPlayer.Rb.AddForce(jumpDirection * jumpforceAlterForce, ForceMode.Impulse);
 
-        this.instaciaPlayer.Rb.isKinematic = false;
+        
     }    
 
     public bool CanDive()
@@ -220,8 +232,14 @@ public class Player_Move : MonoBehaviour
     }
 
     void Run(){
-        if(Input.GetKey(KeyCode.LeftShift)) {this.instaciaPlayer.Speed = baseSpeed * 1.3f; this.instaciaPlayer.PrefebAnim.SetBool("Run", true);}
-        else {this.instaciaPlayer.Speed = baseSpeed; this.instaciaPlayer.PrefebAnim.SetBool("Run", false);}
+        if(Input.GetKey(KeyCode.LeftShift)) {
+            this.instaciaPlayer.Speed = baseSpeed * 1.3f;
+            this.instaciaPlayer.PrefebAnimScp.IsRunning = true;
+        }
+        else {
+            this.instaciaPlayer.Speed = baseSpeed;
+            this.instaciaPlayer.PrefebAnimScp.IsRunning =  false;
+        }
     }
 
     public bool IsGrounded(){

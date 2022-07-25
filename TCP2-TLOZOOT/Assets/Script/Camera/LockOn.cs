@@ -5,56 +5,49 @@ using UnityEngine;
 public class LockOn : MonoBehaviour
 {
     private GameObject[] targets;
-    private GameObject[] EnemyTargets;
     private GameObject closest;
-    private Transform pTransform;
+    private Transform objTransform;
     private float closestDistance;
     float distanceFromPlayer;
     Vector3 pPosition;
 
-    public Transform PlayerTransform{
-        set{this.pTransform = value;}
-        get{return this.pTransform;}
+    public Transform ObjTransform{
+        set{this.objTransform = value;}
+        get{return this.objTransform; }
     }
 
-    public Transform LockOnTarget(){
-        GameObject obj = FindClosestEnemy();
+    public Transform LockOnTarget(bool targetType){
+
+        GameObject obj = FindClosestEnemy(true);
         if(closestDistance < 20){
             return obj.transform;
-        }else return pTransform;
+        }else return ObjTransform;
     }
 
-    public GameObject FindClosestEnemy(){
+    public GameObject FindClosestEnemy(bool isEnemyTarget)
+    {
         closestDistance = Mathf.Infinity;
         closest = null;
-        pPosition = this.pTransform.position;
 
-        targets = GameObject.FindGameObjectsWithTag("LockOnTarget");
+        if (isEnemyTarget)
+        {
+            targets = GameObject.FindGameObjectsWithTag("Enemy");
+        }else targets = GameObject.FindGameObjectsWithTag("LockOnTarget");
 
-        EnemyTargets = GameObject.FindGameObjectsWithTag("Enemy");
+        
 
 
         foreach (GameObject target in targets)
         {
-            distanceFromPlayer = Vector3.Distance(target.transform.position, pPosition); 
+            distanceFromPlayer = Vector3.Distance(target.transform.position, this.ObjTransform.position); 
             
-            if ((distanceFromPlayer + 3) < closestDistance)
+            if (distanceFromPlayer < closestDistance)
             {
                 closest = target;
                 closestDistance = distanceFromPlayer;
             }
-        }
+         }
 
-        foreach (GameObject target in EnemyTargets)
-        {
-            distanceFromPlayer = Vector3.Distance(target.transform.position, pPosition);
-
-            if ((distanceFromPlayer + 3) < closestDistance)
-            {
-                closest = target;
-                closestDistance = distanceFromPlayer;
-            }
-        }
         return closest;
     }
 }

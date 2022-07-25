@@ -6,10 +6,13 @@ public class CameraManegement : MonoBehaviour
 {
     public Player_Scp instaciaPlayer;
 
+    private Vector3 lockOnAnimTrasnf;
+    public Transform lockOnAnimTrasnfBase;
+
     public MeshRenderer slingshotMesh;
     public MeshRenderer slingshotGomaMesh;
-    public SkinnedMeshRenderer hairMesh;
-    public SkinnedMeshRenderer hatMesh;
+    public MeshRenderer lockOnMesh;
+    public SkinnedMeshRenderer LinkMesh;
 
     public float velocidadecamera;
     public float velocidaderotacaocamera;
@@ -24,9 +27,10 @@ public class CameraManegement : MonoBehaviour
 
     private void Awake() {
         this.lockOn = GetComponent<LockOn>();
-        this.lockOn.PlayerTransform = this.instaciaPlayer.transform;
+        this.lockOn.ObjTransform = this.instaciaPlayer.transform;
         ObjRender(false);
         cameraOffset = baseCameraOffset;
+        lockOnAnimTrasnf = lockOnAnimTrasnfBase.position;
     }
 
     private void CheckWalls(Vector3 camPos){
@@ -48,7 +52,7 @@ public class CameraManegement : MonoBehaviour
         CheckWalls(CPosition);
 
         if (CheckFP())
-        {            
+        {
             this.CPosition = pPosition + transform.forward * 0.85f + transform.up * 1.2f;            
         }
 
@@ -77,22 +81,34 @@ public class CameraManegement : MonoBehaviour
         }
 
         //Trava a visão no alvo
-        if(this.instaciaPlayer.IsLocked || this.instaciaPlayer.IsAiming)
+        if (this.instaciaPlayer.IsLocked || this.instaciaPlayer.IsAiming) {
+            this.instaciaPlayer.transform.LookAt(lockOn.LockOnTarget(false));
+            this.instaciaPlayer.PlayerRotation = new Quaternion(0, this.instaciaPlayer.transform.rotation.y, 0, this.instaciaPlayer.transform.rotation.w);
+            LockOnAnimMesh(true);
+        } else LockOnAnimMesh(false);
+
+
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, this.instaciaPlayer.PlayerRotation, velocidaderotacaocamera * Time.deltaTime);
+
+        if (this.instaciaPlayer.IsAiming && lockOn.LockOnTarget(true) != this.instaciaPlayer.transform)
         {
-            this.instaciaPlayer.transform.LookAt(lockOn.LockOnTarget());
-            this.instaciaPlayer.PlayerRotation = new Quaternion(0,this.instaciaPlayer.transform.rotation.y,0,this.instaciaPlayer.transform.rotation.w);
-            
+            this.transform.LookAt(lockOn.LockOnTarget(true));
         }
-        if (this.instaciaPlayer.IsAiming && lockOn.LockOnTarget() != this.instaciaPlayer.transform)
-        {
-            this.transform.LookAt(lockOn.LockOnTarget());
-        }else this.transform.rotation = Quaternion.Lerp(this.transform.rotation, this.instaciaPlayer.transform.rotation, velocidaderotacaocamera * Time.deltaTime);
-    
+
+        
     }
 
     public Vector3 CPosition{
         set{this.cPosition = value;}
         get{return this.cPosition;}
+    }
+
+    public void LockOnAnimMesh(bool canAppear)
+    {
+        if(lockOn.LockOnTarget(true) != this.instaciaPlayer.transform && canAppear)
+        {
+            lockOnMesh.enabled = true;
+        }else lockOnMesh.enabled = false;
     }
 
     public void ObjRender(bool valor)
@@ -108,8 +124,12 @@ public class CameraManegement : MonoBehaviour
             slingshotGomaMesh.enabled = false;
         }
 
-        hairMesh.enabled = !valor;
-        hatMesh.enabled = !valor;
+        LinkMesh.enabled = !valor;
+    }
+
+    public void FixLockOnAnimTranf(int i)
+    {
+        lockOnAnimTrasnf = lockOnAnimTrasnfBase.position + new Vector3(0, 0.5f * i, 0);
     }
 
 }

@@ -17,7 +17,7 @@ public class DmgCollider : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             playerCombat = collision.gameObject.GetComponent<Combat>();            
-            playerCombat.TakeKnockback(enemyCombat.knockbackforce, this.transform.TransformDirection(Vector3.forward));
+            playerCombat.TakeKnockback(enemyCombat.knockbackforce, collision.transform.position - this.transform.position);
             playerCombat.TakeDamage(enemyCombat.GiveDamage(), enemyCombat.dmgModifier);
         }
     }

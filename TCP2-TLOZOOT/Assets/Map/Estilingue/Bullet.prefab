@@ -127,4 +127,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e5d24b523bbe2c4381024c0f4285a70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 3
+  playerCombat: {fileID: 0}
+  life: 2

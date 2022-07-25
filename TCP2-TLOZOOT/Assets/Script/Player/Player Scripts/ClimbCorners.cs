@@ -75,7 +75,7 @@ public class ClimbCorners : MonoBehaviour
             Vector3 playerPos;
             playerPos = this.instaciaPlayer.Rb.transform.position;
                         
-            playerPos.y = this.rayAcima.point.y - 4;
+            playerPos.y = this.rayAcima.point.y - 3;
 
             this.instaciaPlayer.Rb.transform.position = playerPos;
         }

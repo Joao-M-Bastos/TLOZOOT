@@ -23,6 +23,12 @@ public class Swim : MonoBehaviour
         if(collision.gameObject.CompareTag("Water"))
         {
             instaciaPlayer.IsinWater = true;
+            if(!instaciaPlayer.PrefebAnimScp.IsSwiming && !instaciaPlayer.PrefebAnimScp.IsInCorner
+                && !instaciaPlayer.PrefebAnimScp.IsClimbing)
+            {
+                this.instaciaPlayer.PrefebAnimScp.ResetAllAnimations();
+                this.instaciaPlayer.PrefebAnimScp.IsSwiming = true;
+            }
         }
     }
 
@@ -30,6 +36,7 @@ public class Swim : MonoBehaviour
         if(collision.gameObject.CompareTag("Water"))
         {
             instaciaPlayer.IsinWater = false;
+            this.instaciaPlayer.PrefebAnimScp.IsSwiming = false;
         }
     }
 

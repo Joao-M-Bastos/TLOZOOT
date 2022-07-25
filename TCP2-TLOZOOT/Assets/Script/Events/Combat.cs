@@ -35,7 +35,7 @@ public class Combat : MonoBehaviour
         if(!isKnockbackResistant && isVulnerable){
             this.rb.velocity = new Vector3(0,0,0);
             rb.AddForce(transform.up * knockbackforce / 2, ForceMode.VelocityChange);
-            rb.AddForce(diretion * knockbackforce, ForceMode.VelocityChange);
+            rb.AddForce(diretion * knockbackforce / 4, ForceMode.VelocityChange);
         }
     }
 
@@ -43,7 +43,7 @@ public class Combat : MonoBehaviour
         return this.knockbackforce;
     }
 
-    IEnumerator ResetVulnerableCooldown()
+    public IEnumerator ResetVulnerableCooldown()
     {        
         yield return new WaitForSeconds(0.8f);
         isVulnerable = true;
