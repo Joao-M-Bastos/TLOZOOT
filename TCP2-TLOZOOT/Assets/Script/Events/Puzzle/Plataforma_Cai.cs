@@ -28,7 +28,7 @@ public class Plataforma_Cai : MonoBehaviour
 
     IEnumerator FallCooldown()
     {
-        yield return new WaitForSeconds(1f);
-        this.anim.SetBool("Fall", true);
+        yield return new WaitForSeconds(0.25f);
+        this.anim.SetBool("isFall", true);
     }
 }

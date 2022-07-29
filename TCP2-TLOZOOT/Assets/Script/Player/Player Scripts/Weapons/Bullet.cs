@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
             enemyCombat.TakeKnockback(playerCombat.knockbackforce, playerCombat.transform.TransformDirection(Vector3.forward));
             enemyCombat.TakeDamage(playerCombat.GiveDamage(), playerCombat.dmgModifier);
         }
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     void OnCollisionEnter(Collision collision)

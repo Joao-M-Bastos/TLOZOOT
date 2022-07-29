@@ -13,7 +13,10 @@ public class Player_Scp : MonoBehaviour
     private Combat playerCombat;
     //public SkinnedMeshRenderer meshRenderer;
 
+    public int heartsDestroyCount;
+
     //Shoot
+    public bool hasSlingShoot;
     private bool isAiming;
     private bool canShoot;
 
@@ -50,12 +53,16 @@ public class Player_Scp : MonoBehaviour
 
     private void Awake()
     {
+
         this.ParentAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();        
-        playerCombat = this.gameObject.GetComponent<Combat>();
+        PlayerCombat = this.gameObject.GetComponent<Combat>();
+        
+        heartsDestroyCount = this.PlayerCombat.life;
         cameraManegement = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraManegement>();
         this.IsInCorner = false;
     }
+
 
     private void OnLevelWasLoaded(int i){
         StartingPositionObj = GameObject.FindGameObjectsWithTag("StartingPosition");
@@ -81,6 +88,13 @@ public class Player_Scp : MonoBehaviour
         else if(IsSwiming)
         {
             this.Rb.AddForce(0, 6, 0);
+        }
+
+        if(heartsDestroyCount > this.PlayerCombat.life)
+        {
+            Destroy(GameObject.Find("heart"+ heartsDestroyCount));
+            heartsDestroyCount -= 1;
+
         }
     }
 
@@ -142,7 +156,7 @@ public class Player_Scp : MonoBehaviour
     }    
 
     public bool CanWalk(){
-        if(!PlayerCombat.isVulnerable || IsInCornerAnimation || this.IsDiving()){
+        if(!this.PlayerCombat.isVulnerable || this.IsInCornerAnimation || this.IsDiving()){
             this.IsLocked = false;
             return false;
         }else if(this.HasAttacked){
@@ -267,6 +281,11 @@ public class Player_Scp : MonoBehaviour
         get { return this.isAiming; }
     }
 
+    public bool HasSlingShoot
+    {
+        set { this.hasSlingShoot = value; }
+        get { return this.hasSlingShoot; }
+    }
     public bool CanShoot
     {
         set { this.canShoot = value; }

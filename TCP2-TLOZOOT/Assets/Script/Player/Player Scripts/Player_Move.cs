@@ -202,7 +202,7 @@ public class Player_Move : MonoBehaviour
         
         else if (CanDive())
         {
-            jumpforceAlterForce = jumpforce/2;
+            jumpforceAlterForce = jumpforce/1.5F;
             jumpDirection = -transform.up;
             
         }

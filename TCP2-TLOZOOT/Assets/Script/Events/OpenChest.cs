@@ -8,6 +8,8 @@ public class OpenChest : MonoBehaviour
     public Player_Scp instaciaPlayer;
     public Animator anim;
 
+    public int i;
+
     public bool isOpened;
 
     private void Awake() {
@@ -18,9 +20,17 @@ public class OpenChest : MonoBehaviour
     private void OnTriggerStay(Collider collision) {
         if(Input.GetKey(KeyCode.E) && !isOpened){
             isOpened = true;
-            playerCombat.dmgModifier++;
-            this.instaciaPlayer.HasSword = true;
+            playerCombat.dmgModifier = 1;
             this.anim.SetBool("Open", true);
+            if (i == 0)
+            {                
+                this.instaciaPlayer.HasSword = true;
+            }else if(i == 1)
+            {
+                this.instaciaPlayer.HasSlingShoot = true;
+            }
+            
+
         }
     }
 }

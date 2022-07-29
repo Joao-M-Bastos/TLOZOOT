@@ -11,12 +11,7 @@ public class RupeeCounter : MonoBehaviour
 
     private void Awake() {
         this.text = GameObject.FindGameObjectWithTag("Text").GetComponent<Text>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        text.text = "0";
+        this.text.text = "0";
     }
 
     // Update is called once per frame

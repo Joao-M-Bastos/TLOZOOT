@@ -37,7 +37,7 @@ public class Player_Attack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && instaciaPlayer.HasSlingShoot)
         {            
             this.instaciaPlayer.IsAiming = !this.instaciaPlayer.IsAiming;
         }
@@ -66,7 +66,6 @@ public class Player_Attack : MonoBehaviour
         {
             UnBlock();
         }
-
     }
 
     public int GetAtkType(){

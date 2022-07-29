@@ -13,11 +13,13 @@ TagManager:
   - StartingPosition
   - doNotRepeat
   - Water
+  - Puzzle
+  - LIfeCounter
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PostProcessing
   - Water
   - UI
   - Climb

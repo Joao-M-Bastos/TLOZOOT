@@ -23,7 +23,7 @@ public class SwordCollider : MonoBehaviour
     public void OnTriggerEnter(Collider collision){
         if(collision.gameObject.CompareTag("Enemy"))
         {
-            
+            Debug.Log("b");
             enemyCombat = collision.gameObject.GetComponent<Combat>();
             enemyCombat.TakeKnockback(playerCombat.knockbackforce, playerCombat.transform.TransformDirection(Vector3.forward));
             enemyCombat.TakeDamage(playerCombat.GiveDamage(), playerCombat.dmgModifier);

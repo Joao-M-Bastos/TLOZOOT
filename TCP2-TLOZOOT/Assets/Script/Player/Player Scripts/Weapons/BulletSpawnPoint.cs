@@ -19,8 +19,8 @@ public class BulletSpawnPoint : MonoBehaviour
     {
         if(lockOn.LockOnTarget(true) != this.transform)
         {
-
             this.instanciaPlayer.CanShoot = true;
+            this.transform.LookAt(lockOn.LockOnTarget(true));
         }
         else
         {
