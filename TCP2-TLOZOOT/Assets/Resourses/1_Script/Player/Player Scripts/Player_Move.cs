@@ -15,8 +15,8 @@ public class Player_Move : MonoBehaviour
     public float jumpforce;
 
     //Camera
-    Transform cameraTransform;
-    [SerializeField] float turnSmoothVelocity, turnSmoothTime
+    [SerializeField] Transform cameraTransform;
+    [SerializeField] float turnSmoothVelocity, turnSmoothTime;
 
     private void Awake()
     {
@@ -144,7 +144,7 @@ public class Player_Move : MonoBehaviour
         this.instaciaPlayer.PrefebAnimScp.IsClimbing = false;
     }
 
-    void Walk(){
+    void Walk() {
         Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
         Run();
@@ -166,8 +166,8 @@ public class Player_Move : MonoBehaviour
                 instaciaPlayer.transform.rotation = Quaternion.Euler(0f, angle, 0f);
             }
         }
+        
     }
-
     void Jump(){
 
         float jumpforceAlterTransform = 0;

@@ -419,6 +419,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4094819346391897424, guid: 134becd4609e1074a8bfc5cad5aadb9c,
+        type: 3}
+      propertyPath: turnSmoothTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094819346391897424, guid: 134becd4609e1074a8bfc5cad5aadb9c,
+        type: 3}
+      propertyPath: turnSmoothVelocity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6310755505207667073, guid: 134becd4609e1074a8bfc5cad5aadb9c,
         type: 3}
       propertyPath: m_Name
@@ -441,7 +451,7 @@ GameObject:
   - component: {fileID: 1404903972}
   - component: {fileID: 1404903971}
   - component: {fileID: 1404903970}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
