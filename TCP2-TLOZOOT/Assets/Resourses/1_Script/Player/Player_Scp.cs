@@ -7,7 +7,7 @@ public class Player_Scp : MonoBehaviour
     //Instacias
     public PreFabAnimato prefebAnimScp;
     private Animator parentAnim;
-    private CameraManegement cameraManegement;
+    //private CameraManegement cameraManegement;
     private Rigidbody rb;
     private Quaternion playerRotation;
     private Combat playerCombat;
@@ -53,13 +53,12 @@ public class Player_Scp : MonoBehaviour
 
     private void Awake()
     {
-
         this.ParentAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();        
         PlayerCombat = this.gameObject.GetComponent<Combat>();
         
         heartsDestroyCount = this.PlayerCombat.life;
-        cameraManegement = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraManegement>();
+        //cameraManegement = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraManegement>();
         this.IsInCorner = false;
     }
 
@@ -67,13 +66,13 @@ public class Player_Scp : MonoBehaviour
     private void OnLevelWasLoaded(int i){
         StartingPositionObj = GameObject.FindGameObjectsWithTag("StartingPosition");
 
-        this.ResetSpeed();
+        ResetSpeed();
 
         foreach (GameObject obj in StartingPositionObj)
         {
             if(obj.GetComponent<StartingCode>() != null && obj.GetComponent<StartingCode>().startingCode == startingPosCode){
-                this.transform.position = obj.transform.position;
-                this.transform.rotation = obj.transform.rotation;
+                transform.position = obj.transform.position;
+                transform.rotation = obj.transform.rotation;
             }
         }
     }
@@ -100,7 +99,7 @@ public class Player_Scp : MonoBehaviour
 
     private void LateUpdate()
     {
-        this.cameraManegement.CameraUpdate();
+        // this.cameraManegement.CameraUpdate();
         //Rotaciona o jogador caso algo no codigo altere a rotação
         transform.rotation = PlayerRotation;
     }
