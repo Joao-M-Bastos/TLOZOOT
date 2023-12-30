@@ -7,7 +7,6 @@ public class Player_Scp : MonoBehaviour
     //Instacias
     public PreFabAnimato prefebAnimScp;
     private Animator parentAnim;
-    //private CameraManegement cameraManegement;
     private Rigidbody rb;
     private Quaternion playerRotation;
     private Combat playerCombat;

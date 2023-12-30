@@ -14,6 +14,10 @@ public class Player_Move : MonoBehaviour
     //Jump
     public float jumpforce;
 
+    //Camera
+    Transform cameraTransform;
+    [SerializeField] float turnSmoothVelocity, turnSmoothTime
+
     private void Awake()
     {
         this.instaciaPlayer.Speed = baseSpeed;
@@ -141,40 +145,27 @@ public class Player_Move : MonoBehaviour
     }
 
     void Walk(){
-        Vector3 velocityWalk;
+        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
-        var direcao = new Vector3(InputX, 0, InputZ);
-
-        //Mantem a velocidade em y e altera a velocidade para frente
-        velocityWalk = this.instaciaPlayer.PlayerForword * this.instaciaPlayer.Speed * InputZ;
-
-        
         Run();
 
-        if(this.instaciaPlayer.IsLocked || this.instaciaPlayer.IsAiming){
-            //Movimenta o jogador nos eixo X e Z
-            velocityWalk += this.instaciaPlayer.PlayerRight * this.instaciaPlayer.Speed * InputX;
-            velocityWalk *= 0.40f;
-        }
-        else{
-            //Se não está travado a camera rotaciona
-            var camerarot = this.instaciaPlayer.transform.rotation;
-            camerarot.x = 0;
-            camerarot.z = 0;
+        if (moveDirection.magnitude >= 0.1f)
+        {
 
-            if (velocityWalk.x != 0 && velocityWalk.z != 0)
+            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
+
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward * instaciaPlayer.Speed;
+
+            moveDir.y = instaciaPlayer.Rb.velocity.y;
+
+            if (Mathf.Abs(instaciaPlayer.Rb.velocity.x) + Mathf.Abs(instaciaPlayer.Rb.velocity.z) <= 7.5f)
             {
-                this.instaciaPlayer.PrefebAnimScp.IsWalking = true;
+                instaciaPlayer.Rb.velocity = moveDir;
+                instaciaPlayer.transform.rotation = Quaternion.Euler(0f, angle, 0f);
             }
-            else this.instaciaPlayer.PrefebAnimScp.IsWalking = false;
-
-            //Rotaciona o jogador
-            this.instaciaPlayer.PlayerRotation = Quaternion.Lerp(this.instaciaPlayer.PlayerRotation, Quaternion.LookRotation(direcao) * camerarot, 3f * Time.deltaTime);
-
         }
-
-        velocityWalk.y = this.instaciaPlayer.Rb.velocity.y;
-        this.instaciaPlayer.Rb.velocity = velocityWalk;
     }
 
     void Jump(){
