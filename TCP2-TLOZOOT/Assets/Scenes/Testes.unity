@@ -426,6 +426,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4094819346391897424, guid: 134becd4609e1074a8bfc5cad5aadb9c,
         type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 1579092205}
+    - target: {fileID: 4094819346391897424, guid: 134becd4609e1074a8bfc5cad5aadb9c,
+        type: 3}
       propertyPath: turnSmoothVelocity
       value: 1
       objectReference: {fileID: 0}
