@@ -160,11 +160,12 @@ public class Player_Move : MonoBehaviour
 
             moveDir.y = instaciaPlayer.Rb.velocity.y;
 
-            if (Mathf.Abs(instaciaPlayer.Rb.velocity.x) + Mathf.Abs(instaciaPlayer.Rb.velocity.z) <= 7.5f)
+            if (Mathf.Abs(instaciaPlayer.Rb.velocity.x) + Mathf.Abs(instaciaPlayer.Rb.velocity.z) <= 10f)
             {
                 instaciaPlayer.Rb.velocity = moveDir;
-                instaciaPlayer.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                
             }
+            instaciaPlayer.transform.rotation = Quaternion.Euler(0f, angle, 0f);
         }
         
     }
