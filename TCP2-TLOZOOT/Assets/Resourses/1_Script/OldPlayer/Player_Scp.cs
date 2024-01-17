@@ -29,7 +29,7 @@ public class Player_Scp : MonoBehaviour
 
     //Swim
     private bool isSwiming;
-    public LayerMask waterLayerMask;
+    public LayerMask waterLayerMask;,
     private bool isinWater;
     private RaycastHit swimHit;
 

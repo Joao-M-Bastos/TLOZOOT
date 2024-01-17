@@ -4,6 +4,22 @@ using UnityEngine;
 
 public class LinkScpt : MonoBehaviour
 {
+    #region Movement
+
+    //Walk
+    [SerializeField] public float baseSpeed;
+    [SerializeField] public float speedClimb;
+    private float InputX, InputZ;
+
+    //Jump
+    public float jumpforce;
+
+    //Camera
+    [SerializeField] Transform cameraTransform;
+    [SerializeField] float turnSmoothVelocity, turnSmoothTime;
+
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {

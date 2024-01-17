@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseState
+public abstract class BaseState
 {
     // Start is called before the first frame update
-    void EnterState(LinkScpt link)
-    {
-        
-    }
+    public abstract void EnterState(LinkScpt link, StateMachineController machineController);
 
     // Update is called once per frame
-    void UpdateState(LinkScpt link)
-    {
-        
-    }
+    public abstract void UpdateState(LinkScpt link, StateMachineController machineController);
+    
+    public abstract void EndState(LinkScpt link, StateMachineController machineController);
 }

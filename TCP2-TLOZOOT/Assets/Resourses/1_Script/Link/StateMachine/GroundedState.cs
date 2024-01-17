@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class GroundedState : BaseState
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void EnterState(LinkScpt link, StateMachineController machineController)
     {
-        
+        throw new System.NotImplementedException();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void EndState(LinkScpt link, StateMachineController machineController)
     {
-        
+        throw new System.NotImplementedException();
+    }
+
+    public override void UpdateState(LinkScpt link, StateMachineController machineController)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -8,7 +8,7 @@ public class Player_Move : MonoBehaviour
 
     //Walk
     public float baseSpeed;
-    public float speedClimb;    
+    public float speedClimb;
     private float InputX, InputZ;
 
     //Jump
