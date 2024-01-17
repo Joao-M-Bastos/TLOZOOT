@@ -8,8 +8,8 @@ public class StateMachineController : MonoBehaviour
 
     BaseState currentState;
 
-    GroundedState groundedState = new GroundedState();
-    ClimbingState climbimgState = new ClimbingState();
+    public GroundedState groundedState = new GroundedState();
+    public ClimbingState climbimgState = new ClimbingState();
 
     private void Awake()
     {

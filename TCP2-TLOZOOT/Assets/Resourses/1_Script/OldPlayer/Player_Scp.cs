@@ -29,7 +29,7 @@ public class Player_Scp : MonoBehaviour
 
     //Swim
     private bool isSwiming;
-    public LayerMask waterLayerMask;,
+    public LayerMask waterLayerMask;
     private bool isinWater;
     private RaycastHit swimHit;
 
@@ -70,8 +70,7 @@ public class Player_Scp : MonoBehaviour
         foreach (GameObject obj in StartingPositionObj)
         {
             if(obj.GetComponent<StartingCode>() != null && obj.GetComponent<StartingCode>().startingCode == startingPosCode){
-                transform.position = obj.transform.position;
-                transform.rotation = obj.transform.rotation;
+                transform.SetPositionAndRotation(obj.transform.position, obj.transform.rotation);
             }
         }
     }
