@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class GroundedState : BaseState
 {
+    float turnSmoothVelocity;
     public override void EnterState(LinkScpt link, StateMachineController machineController)
     {
         throw new System.NotImplementedException();
@@ -27,26 +28,26 @@ public class GroundedState : BaseState
                 speed = speed * 1.3f;
             }
 
-            if (moveDirection.magnitude >= 0.1f)
-            {
-                float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
+            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref link.TurnSmoothVelocity, link.TurnSmoothTime);
+            float angle = Mathf.SmoothDampAngle(link.transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, link.TurnSmoothTime);
 
-                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward * speed;
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward * speed;
 
-                moveDir.y = instaciaPlayer.Rb.velocity.y;
+            moveDir.y = link.linkRigidbody.velocity.y;
 
-                if (Mathf.Abs(instaciaPlayer.Rb.velocity.x) + Mathf.Abs(instaciaPlayer.Rb.velocity.z) <= 10f)
-                {
-                    instaciaPlayer.Rb.velocity = moveDir;
+            link.linkRigidbody.velocity = moveDir;
+                
+            link.transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-                }
-                instaciaPlayer.transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            }
+        }
+        else
+        {
+            Vector3 stop = new Vector3(0, link.linkRigidbody.velocity.y, 0);
+            link.linkRigidbody.velocity = stop;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) Jump();
+        //if (Input.GetKeyDown(KeyCode.Space)) Jump();
 
         TryChangeState(link, machineController);
     }

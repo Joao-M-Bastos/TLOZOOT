@@ -19,7 +19,8 @@ public class StateMachineController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ChangeState(groundedState);
+        currentState = groundedState;
+        currentState.EnterState(linkScript, this);
     }
 
     public void ChangeState(BaseState newState)
@@ -29,7 +30,7 @@ public class StateMachineController : MonoBehaviour
         currentState.EnterState(linkScript, this);
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         currentState.UpdateState(linkScript, this);
     }
