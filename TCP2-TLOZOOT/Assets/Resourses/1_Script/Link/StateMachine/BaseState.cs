@@ -9,6 +9,8 @@ public abstract class BaseState
 
     // Update is called once per frame
     public abstract void UpdateState(LinkScpt link, StateMachineController machineController);
-    
+
+    public abstract void FixedUpdateState(LinkScpt link, StateMachineController machineController);
+
     public abstract void EndState(LinkScpt link, StateMachineController machineController);
 }

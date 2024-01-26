@@ -10,6 +10,7 @@ public class StateMachineController : MonoBehaviour
 
     public GroundedState groundedState = new GroundedState();
     public ClimbingState climbimgState = new ClimbingState();
+    public OnAirState onAirState = new OnAirState();
 
     private void Awake()
     {
@@ -31,6 +32,11 @@ public class StateMachineController : MonoBehaviour
     }
 
     public void FixedUpdate()
+    {
+        currentState.FixedUpdateState(linkScript, this);
+    }
+
+    public void Update()
     {
         currentState.UpdateState(linkScript, this);
     }
