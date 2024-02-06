@@ -41,7 +41,7 @@ public class ClimbingState : BaseState
         }
         if (CanClimbCorner(link, machineController))
         {
-
+            machineController.ChangeState(machineController.cornerState);
         }
     }
 

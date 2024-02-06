@@ -10,6 +10,7 @@ public class StateMachineController : MonoBehaviour
 
     public GroundedState groundedState = new GroundedState();
     public ClimbingState climbimgState = new ClimbingState();
+    public CornerState cornerState = new CornerState();
     public OnAirState onAirState = new OnAirState();
 
     private void Awake()
