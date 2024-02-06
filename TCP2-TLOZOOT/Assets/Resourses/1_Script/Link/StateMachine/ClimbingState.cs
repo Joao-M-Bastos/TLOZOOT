@@ -39,63 +39,64 @@ public class ClimbingState : BaseState
         {
             machineController.ChangeState(machineController.groundedState);
         }
-        if (CanClimbCorner())
+        if (CanClimbCorner(link, machineController))
         {
 
         }
     }
 
-    public void CanClimbCorner()
+    public bool CanClimbCorner(LinkScpt link, StateMachineController machineController)
     {
-        if (!RayAcimaFrontal())
+        if (!RayAcimaFrontal(link, machineController))
         {
-            if (RayFrontal() && RayAcima())
+            if (RayFrontal(link, machineController) && RayAcima(link, machineController))
             {
-                GetInCorner();
+                return true;
             }
         }
+        return false;
     }
 
-    public bool RayFrontal()
+    public bool RayFrontal(LinkScpt link, StateMachineController machineController)
     {
         //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = this.transform.position + new Vector3(0, 2f, 0);
+        Vector3 rayStartPos = link.transform.position + new Vector3(0, 2f, 0);
 
         //Debug.DrawRay(rayStartPos, instaciaPlayer.PlayerForword * 1.4f, Color.green);
 
-        if (Physics.Raycast(rayStartPos, instaciaPlayer.PlayerForword, out rayFrontal, 1.2f, instaciaPlayer.ClimbLayerMask)
-         || Physics.Raycast(rayStartPos, instaciaPlayer.PlayerForword, out rayFrontal, 1.2f, instaciaPlayer.GroundLayerMask))
+        if (Physics.Raycast(rayStartPos, link.transform.forward, out RaycastHit rayFrontal, 1.2f, link.ClimbMask)
+         || Physics.Raycast(rayStartPos, link.transform.forward, out rayFrontal, 1.2f, link.GroundMask))
         {
             return true;
         }
         return false;
     }
 
-    public bool RayAcima()
+    public bool RayAcima(LinkScpt link, StateMachineController machineController)
     {
 
         //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = this.transform.position + instaciaPlayer.PlayerForword * 1.5f + new Vector3(0f, 5f, 0f);
+        Vector3 rayStartPos = link.transform.position + link.transform.forward * 1.5f + new Vector3(0f, 5f, 0f);
 
         //Debug.DrawRay(rayStartPos, -this.transform.up * 2.4f, Color.green);
 
-        if (Physics.Raycast(rayStartPos, -this.transform.up, out rayAcima, 2.4f, instaciaPlayer.ClimbLayerMask)
-        || Physics.Raycast(rayStartPos, -this.transform.up, out rayAcima, 2.4f, instaciaPlayer.GroundLayerMask))
+        if (Physics.Raycast(rayStartPos, -link.transform.up, out RaycastHit rayAcima, 2.4f, link.ClimbMask)
+        || Physics.Raycast(rayStartPos, -link.transform.up, out rayAcima, 2.4f, link.GroundMask))
         {
             return true;
         }
         return false;
     }
 
-    public bool RayAcimaFrontal()
+    public bool RayAcimaFrontal(LinkScpt link, StateMachineController machineController)
     {
         //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = this.transform.position + new Vector3(0f, 4, 0f);
+        Vector3 rayStartPos = link.transform.position + new Vector3(0f, 4, 0f);
 
-        Debug.DrawRay(rayStartPos, instaciaPlayer.PlayerForword * 2.4f, Color.green);
+        Debug.DrawRay(rayStartPos, link.transform.forward * 2.4f, Color.green);
 
-        if (Physics.Raycast(rayStartPos, instaciaPlayer.PlayerForword, out rayAcimaFrontal, 2.4f, instaciaPlayer.ClimbLayerMask)
-        || Physics.Raycast(rayStartPos, instaciaPlayer.PlayerForword, out rayAcimaFrontal, 2.4f, instaciaPlayer.GroundLayerMask))
+        if (Physics.Raycast(rayStartPos, link.transform.forward, out RaycastHit rayAcimaFrontal, 2.4f, link.ClimbMask)
+        || Physics.Raycast(rayStartPos, link.transform.forward, out rayAcimaFrontal, 2.4f, link.GroundMask))
         {
             return true;
         }

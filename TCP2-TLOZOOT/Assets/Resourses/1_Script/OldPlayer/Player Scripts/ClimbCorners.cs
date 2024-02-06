@@ -73,11 +73,11 @@ public class ClimbCorners : MonoBehaviour
             this.instaciaPlayer.IsInCorner = true;
 
             Vector3 playerPos;
-            playerPos = this.instaciaPlayer.Rb.transform.position;
+            playerPos = this.instaciaPlayer.transform.position;
                         
             playerPos.y = this.rayAcima.point.y - 3;
 
-            this.instaciaPlayer.Rb.transform.position = playerPos;
+            this.instaciaPlayer.transform.position = playerPos;
         }
         
     }
