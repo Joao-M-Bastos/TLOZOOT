@@ -35,7 +35,7 @@ public class OnAirState : BaseState
 
     public void TryChangeState(LinkScpt link, StateMachineController machineController)
     {
-        if (Physics.Raycast(link.transform.position + new Vector3(0, 0.4f, 0), link.transform.forward, out RaycastHit wallHit, 1.2f, link.ClimbMask))
+        if (Physics.Raycast(link.transform.position + new Vector3(0, 0.4f, 0), link.transform.forward, out RaycastHit wallHit, 0.75f, link.ClimbMask))
         {
             link.transform.rotation = Quaternion.LookRotation(-wallHit.normal);
             machineController.ChangeState(machineController.climbimgState);

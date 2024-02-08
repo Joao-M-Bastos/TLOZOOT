@@ -60,9 +60,9 @@ public class ClimbingState : BaseState
     public bool RayFrontal(LinkScpt link, StateMachineController machineController)
     {
         //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = link.transform.position + new Vector3(0, 2f, 0);
+        Vector3 rayStartPos = link.transform.position + new Vector3(0, 0.8f, 0);
 
-        //Debug.DrawRay(rayStartPos, instaciaPlayer.PlayerForword * 1.4f, Color.green);
+        Debug.DrawRay(rayStartPos, link.transform.forward * 1.4f, Color.green);
 
         if (Physics.Raycast(rayStartPos, link.transform.forward, out RaycastHit rayFrontal, 1.2f, link.ClimbMask)
          || Physics.Raycast(rayStartPos, link.transform.forward, out rayFrontal, 1.2f, link.GroundMask))
@@ -76,12 +76,12 @@ public class ClimbingState : BaseState
     {
 
         //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = link.transform.position + link.transform.forward * 1.5f + new Vector3(0f, 5f, 0f);
+        Vector3 rayStartPos = link.transform.position + link.transform.forward * 1f + new Vector3(0f, 1.5f, 0f);
 
-        //Debug.DrawRay(rayStartPos, -this.transform.up * 2.4f, Color.green);
+        Debug.DrawRay(rayStartPos, -link.transform.up * 0.5f, Color.green);
 
-        if (Physics.Raycast(rayStartPos, -link.transform.up, out RaycastHit rayAcima, 2.4f, link.ClimbMask)
-        || Physics.Raycast(rayStartPos, -link.transform.up, out rayAcima, 2.4f, link.GroundMask))
+        if (Physics.Raycast(rayStartPos, -link.transform.up, out RaycastHit rayAcima, 0.5f, link.ClimbMask)
+        || Physics.Raycast(rayStartPos, -link.transform.up, out rayAcima, 0.5f, link.GroundMask))
         {
             return true;
         }
@@ -91,7 +91,7 @@ public class ClimbingState : BaseState
     public bool RayAcimaFrontal(LinkScpt link, StateMachineController machineController)
     {
         //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = link.transform.position + new Vector3(0f, 4, 0f);
+        Vector3 rayStartPos = link.transform.position + new Vector3(0f, 1.5f, 0f);
 
         Debug.DrawRay(rayStartPos, link.transform.forward * 2.4f, Color.green);
 
