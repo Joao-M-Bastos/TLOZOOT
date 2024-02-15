@@ -32,7 +32,7 @@ public class CornerState : BaseState
 
     public void TryChangeState(LinkScpt link, StateMachineController machineController)
     {
-        if (!link.IsOnGround())
+        if (!link.CanClimbCorner())
         {
             machineController.ChangeState(machineController.onAirState);
         }

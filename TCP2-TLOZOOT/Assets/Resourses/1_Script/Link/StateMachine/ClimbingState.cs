@@ -39,67 +39,9 @@ public class ClimbingState : BaseState
         {
             machineController.ChangeState(machineController.groundedState);
         }
-        if (CanClimbCorner(link, machineController))
+        if (link.CanClimbCorner())
         {
             machineController.ChangeState(machineController.cornerState);
         }
-    }
-
-    public bool CanClimbCorner(LinkScpt link, StateMachineController machineController)
-    {
-        if (!RayAcimaFrontal(link, machineController))
-        {
-            if (RayFrontal(link, machineController) && RayAcima(link, machineController))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool RayFrontal(LinkScpt link, StateMachineController machineController)
-    {
-        //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = link.transform.position + new Vector3(0, 0.8f, 0);
-
-        Debug.DrawRay(rayStartPos, link.transform.forward * 1.4f, Color.green);
-
-        if (Physics.Raycast(rayStartPos, link.transform.forward, out RaycastHit rayFrontal, 1.2f, link.ClimbMask)
-         || Physics.Raycast(rayStartPos, link.transform.forward, out rayFrontal, 1.2f, link.GroundMask))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool RayAcima(LinkScpt link, StateMachineController machineController)
-    {
-
-        //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = link.transform.position + link.transform.forward * 1f + new Vector3(0f, 1.5f, 0f);
-
-        Debug.DrawRay(rayStartPos, -link.transform.up * 0.5f, Color.green);
-
-        if (Physics.Raycast(rayStartPos, -link.transform.up, out RaycastHit rayAcima, 0.5f, link.ClimbMask)
-        || Physics.Raycast(rayStartPos, -link.transform.up, out rayAcima, 0.5f, link.GroundMask))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool RayAcimaFrontal(LinkScpt link, StateMachineController machineController)
-    {
-        //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = link.transform.position + new Vector3(0f, 1.5f, 0f);
-
-        Debug.DrawRay(rayStartPos, link.transform.forward * 2.4f, Color.green);
-
-        if (Physics.Raycast(rayStartPos, link.transform.forward, out RaycastHit rayAcimaFrontal, 2.4f, link.ClimbMask)
-        || Physics.Raycast(rayStartPos, link.transform.forward, out rayAcimaFrontal, 2.4f, link.GroundMask))
-        {
-            return true;
-        }
-        return false;
     }
 }

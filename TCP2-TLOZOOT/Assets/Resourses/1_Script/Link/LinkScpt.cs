@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using static UnityEngine.LightAnchor;
 
@@ -8,7 +9,7 @@ public class LinkScpt : MonoBehaviour
     #region Instances
 
     [SerializeField] Rigidbody linkRigidbody;
-
+    [SerializeField] CinemachineCamera cam;
     public Rigidbody RB => linkRigidbody;
 
     #endregion
@@ -70,5 +71,68 @@ public class LinkScpt : MonoBehaviour
         velocity.y = 0;
         velocity.Normalize();
         transform.LookAt(this.transform.position + velocity, transform.up);
+    }
+
+    public bool CanClimbCorner()
+    {
+        if (RayFrontal())
+        {
+            if (!RayAcimaFrontal() && RayAcima())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool RayFrontal()
+    {
+        //Verifica se há uma parede escalavel a frente
+        Vector3 rayStartPos = transform.position + new Vector3(0, 0.8f, 0);
+
+        Debug.DrawRay(rayStartPos, transform.forward * 1.3f, Color.green);
+
+        if (Physics.Raycast(rayStartPos, transform.forward, out RaycastHit rayFrontal, 0.8f, ClimbMask)
+         || Physics.Raycast(rayStartPos, transform.forward, out rayFrontal, 0.8f, GroundMask))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool RayAcima()
+    {
+
+        //Verifica se há uma parede escalavel a frente
+        Vector3 rayStartPos = transform.position + transform.forward * 1f + new Vector3(0f, 1.5f, 0f);
+
+        Debug.DrawRay(rayStartPos, -transform.up * 0.5f, Color.green);
+
+        if (Physics.Raycast(rayStartPos, -transform.up, out RaycastHit rayAcima, 0.4f, ClimbMask)
+        || Physics.Raycast(rayStartPos, -transform.up, out rayAcima, 0.4f, GroundMask))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool RayAcimaFrontal()
+    {
+        //Verifica se há uma parede escalavel a frente
+        Vector3 rayStartPos = transform.position + new Vector3(0f, 1.5f, 0f);
+
+        Debug.DrawRay(rayStartPos, transform.forward * 2.4f, Color.green);
+
+        if (Physics.Raycast(rayStartPos, transform.forward, out RaycastHit rayAcimaFrontal, 2.4f, ClimbMask)
+        || Physics.Raycast(rayStartPos, transform.forward, out rayAcimaFrontal, 2.4f, GroundMask))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void ChangeFov()
+    {
+
     }
 }
