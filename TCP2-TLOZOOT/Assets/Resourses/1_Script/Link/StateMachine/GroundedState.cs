@@ -25,7 +25,12 @@ public class GroundedState : BaseState
             float speed = link.BaseSpeed;
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                speed = speed * 1.3f;
+                link.ChangeFov(70);
+                speed = speed * 1.5f;
+            }
+            else
+            {
+                link.ChangeFov(60);
             }
 
             float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;

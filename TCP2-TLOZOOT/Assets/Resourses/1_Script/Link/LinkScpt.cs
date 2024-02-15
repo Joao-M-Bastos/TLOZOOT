@@ -131,8 +131,14 @@ public class LinkScpt : MonoBehaviour
         return false;
     }
 
-    public void ChangeFov()
+    public void ChangeFov(int fov)
     {
+        float newFov;
+        if(fov > cam.Lens.FieldOfView)
+            newFov = Mathf.Lerp(cam.Lens.FieldOfView, fov, 1f * Time.deltaTime);
+        else
+            newFov = Mathf.Lerp(cam.Lens.FieldOfView, fov, 10f*Time.deltaTime);
 
+        cam.Lens.FieldOfView = newFov;
     }
 }
