@@ -207,6 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkRigidbody: {fileID: 0}
   cam: {fileID: 186975658}
+  capsuleCollider: {fileID: 43050360}
   baseSpeed: 5
   speedClimb: 5
   jumpforce: 6

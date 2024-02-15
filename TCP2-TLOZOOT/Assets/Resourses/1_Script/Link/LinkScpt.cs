@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -10,7 +11,9 @@ public class LinkScpt : MonoBehaviour
 
     [SerializeField] Rigidbody linkRigidbody;
     [SerializeField] CinemachineCamera cam;
+    [SerializeField] CapsuleCollider capsuleCollider;
     public Rigidbody RB => linkRigidbody;
+    public CapsuleCollider CapsuleC => capsuleCollider;
 
     #endregion
 
@@ -52,7 +55,19 @@ public class LinkScpt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        DynamicFOV();
+    }
+
+    private void DynamicFOV()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            ChangeFov(70);
+        }
+        else
+        {
+            ChangeFov(60);
+        }
     }
 
     public bool IsOnGround()
