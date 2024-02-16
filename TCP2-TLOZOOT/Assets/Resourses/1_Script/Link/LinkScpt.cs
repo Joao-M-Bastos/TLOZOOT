@@ -11,9 +11,7 @@ public class LinkScpt : MonoBehaviour
 
     [SerializeField] Rigidbody linkRigidbody;
     [SerializeField] CinemachineCamera cam;
-    [SerializeField] CapsuleCollider capsuleCollider;
     public Rigidbody RB => linkRigidbody;
-    public CapsuleCollider CapsuleC => capsuleCollider;
 
     #endregion
 
