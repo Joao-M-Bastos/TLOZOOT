@@ -11,6 +11,7 @@ public class LinkScpt : MonoBehaviour
 
     [SerializeField] Rigidbody linkRigidbody;
     [SerializeField] CinemachineCamera cam;
+    [SerializeField] LockOn lockOn;
     public Rigidbody RB => linkRigidbody;
 
     [SerializeField] LinkCombat linkCombat;
@@ -38,6 +39,7 @@ public class LinkScpt : MonoBehaviour
     //Camera
     [SerializeField] Transform cameraTransform;
     [SerializeField] float turnSmoothVelocity, turnSmoothTime;
+    [SerializeField] 
     public float TurnSmoothVelocity => turnSmoothVelocity;
     public float TurnSmoothTime => turnSmoothTime;
 
@@ -172,6 +174,11 @@ public class LinkScpt : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Water")) isInWater = false;
+    }
+
+    public void LockCamera()
+    {
+
     }
 
     public void Attack()
