@@ -43,9 +43,12 @@ public class LinkScpt : MonoBehaviour
     //Layers
     [SerializeField] LayerMask climbLayerMask;
     [SerializeField] LayerMask groundLayerMask;
+    [SerializeField] LayerMask waterLayerMask;
 
     public LayerMask ClimbMask => climbLayerMask;
     public LayerMask GroundMask => groundLayerMask;
+    public LayerMask WaterMask => waterLayerMask;
+
     #endregion
 
     // Start is called before the first frame update

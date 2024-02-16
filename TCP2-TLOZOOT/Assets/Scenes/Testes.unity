@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c996f4c9b8af2a40863ffd8e7ddf7b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkRigidbody: {fileID: 0}
+  linkRigidbody: {fileID: 43050366}
   cam: {fileID: 186975658}
   baseSpeed: 5
   speedClimb: 5
@@ -219,6 +219,9 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  waterLayerMask:
+    serializedVersion: 2
+    m_Bits: 16
 --- !u!54 &43050366
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1373,9 +1376,9 @@ GameObject:
   - component: {fileID: 2064529937}
   - component: {fileID: 2064529936}
   - component: {fileID: 2064529935}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
