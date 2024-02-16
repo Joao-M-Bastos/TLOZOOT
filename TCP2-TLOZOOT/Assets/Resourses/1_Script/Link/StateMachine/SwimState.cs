@@ -53,16 +53,14 @@ public class SwimState : BaseState
             link.transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
         }
-        else
-        {
-            Vector3 stop = new Vector3(0, link.RB.velocity.y, 0);
-            link.RB.velocity = stop;
-        }
     }
 
     public override void UpdateState(LinkScpt link, StateMachineController machineController)
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space) && !RayAcimaFrontal(link, machineController))
+        {
+            link.RB.AddForce(-link.transform.up * 10, ForceMode.VelocityChange);
+        }
     }
 
     public bool RayAcimaFrontal(LinkScpt link, StateMachineController machineController)
