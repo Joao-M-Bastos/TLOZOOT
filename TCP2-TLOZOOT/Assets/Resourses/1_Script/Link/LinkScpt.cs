@@ -178,7 +178,7 @@ public class LinkScpt : MonoBehaviour
 
     public void LockCamera()
     {
-
+        lockOn.
     }
 
     public void Attack()
