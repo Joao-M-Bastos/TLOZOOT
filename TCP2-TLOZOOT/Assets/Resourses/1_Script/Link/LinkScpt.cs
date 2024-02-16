@@ -24,6 +24,10 @@ public class LinkScpt : MonoBehaviour
     public float BaseSpeed => baseSpeed;
     public float BaseSpeedClimb => speedClimb;
 
+    //Swim
+    bool isInWater;
+    public bool IsInWater => isInWater;
+
 
     //Jump
     [SerializeField] float jumpforce;
@@ -153,5 +157,15 @@ public class LinkScpt : MonoBehaviour
             newFov = Mathf.Lerp(cam.Lens.FieldOfView, fov, 10f*Time.deltaTime);
 
         cam.Lens.FieldOfView = newFov;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Water")) isInWater = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Water")) isInWater = false;
     }
 }

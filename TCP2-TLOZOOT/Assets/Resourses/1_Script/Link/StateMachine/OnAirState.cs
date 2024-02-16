@@ -47,6 +47,9 @@ public class OnAirState : BaseState
         }else if (link.CanClimbCorner())
         {
             machineController.ChangeState(machineController.cornerState);
+        }else if (link.IsInWater)
+        {
+            machineController.ChangeState(machineController.swimState);
         }
     }
 }

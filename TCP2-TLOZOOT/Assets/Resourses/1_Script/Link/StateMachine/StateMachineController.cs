@@ -12,6 +12,7 @@ public class StateMachineController : MonoBehaviour
     public ClimbingState climbimgState = new ClimbingState();
     public CornerState cornerState = new CornerState();
     public OnAirState onAirState = new OnAirState();
+    public SwimState swimState = new SwimState();
 
     private void Awake()
     {
