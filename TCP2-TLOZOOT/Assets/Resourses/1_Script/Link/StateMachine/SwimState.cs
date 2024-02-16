@@ -61,6 +61,8 @@ public class SwimState : BaseState
         {
             link.RB.AddForce(-link.transform.up * 10, ForceMode.VelocityChange);
         }
+
+        TryChangeState(link, machineController);
     }
 
     public bool RayAcimaFrontal(LinkScpt link, StateMachineController machineController)
@@ -75,5 +77,13 @@ public class SwimState : BaseState
             return true;
         }
         return false;
+    }
+
+    public void TryChangeState(LinkScpt link, StateMachineController machineController)
+    {
+        if (!link.IsInWater)
+        {
+            machineController.ChangeState(machineController.onAirState);
+        }
     }
 }
