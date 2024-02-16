@@ -2,17 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwimState : MonoBehaviour
+public class SwimState : BaseState
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void EndState(LinkScpt link, StateMachineController machineController)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void EnterState(LinkScpt link, StateMachineController machineController)
     {
-        
+        link.RB.useGravity = false;
+    }
+
+    public override void FixedUpdateState(LinkScpt link, StateMachineController machineController)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void UpdateState(LinkScpt link, StateMachineController machineController)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -10,8 +10,6 @@ public class CornerState : BaseState
     public override void EndState(LinkScpt link, StateMachineController machineController)
     {
         exit = false;
-        link.RB.useGravity = true;
-        //link.CapsuleC.isTrigger = false;
     }
 
     public override void EnterState(LinkScpt link, StateMachineController machineController)
@@ -36,10 +34,8 @@ public class CornerState : BaseState
                 distanceFront -= Time.deltaTime;
             }
             else
-            {
-                // link.CapsuleC.isTrigger = false;
                 exit = false;
-            }
+            
         }
     }
 

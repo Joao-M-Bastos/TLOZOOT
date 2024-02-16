@@ -11,7 +11,7 @@ public class ClimbingState : BaseState
 
     public override void EndState(LinkScpt link, StateMachineController machineController)
     {
-        link.RB.useGravity = true;
+        
     }
 
     public override void FixedUpdateState(LinkScpt link, StateMachineController machineController)
@@ -38,8 +38,7 @@ public class ClimbingState : BaseState
         if (!Physics.Raycast(link.transform.position + new Vector3(0, 0.4f, 0), link.transform.forward, out RaycastHit wallHit, 1.2f, link.ClimbMask))
         {
             machineController.ChangeState(machineController.groundedState);
-        }
-        if (link.CanClimbCorner())
+        }else if (link.CanClimbCorner())
         {
             machineController.ChangeState(machineController.cornerState);
         }

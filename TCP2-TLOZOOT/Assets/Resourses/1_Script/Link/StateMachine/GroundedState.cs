@@ -8,7 +8,7 @@ public class GroundedState : BaseState
     float turnSmoothVelocity;
     public override void EnterState(LinkScpt link, StateMachineController machineController)
     {
-
+        link.RB.useGravity = true;
     }
 
     public override void EndState(LinkScpt link, StateMachineController machineController)

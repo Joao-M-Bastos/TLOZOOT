@@ -13,6 +13,7 @@ public class OnAirState : BaseState
     public override void EnterState(LinkScpt link, StateMachineController machineController)
     {
         link.LookAtMoveDirection();
+        link.RB.useGravity = true;
     }
 
     public override void FixedUpdateState(LinkScpt link, StateMachineController machineController)
@@ -43,6 +44,9 @@ public class OnAirState : BaseState
         else if (link.IsOnGround())
         {
             machineController.ChangeState(machineController.groundedState);
+        }else if (link.CanClimbCorner())
+        {
+            machineController.ChangeState(machineController.cornerState);
         }
     }
 }
