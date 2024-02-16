@@ -13,6 +13,8 @@ public class LinkScpt : MonoBehaviour
     [SerializeField] CinemachineCamera cam;
     public Rigidbody RB => linkRigidbody;
 
+    [SerializeField] LinkCombat linkCombat;
+
     #endregion
 
     #region Movement
@@ -154,10 +156,10 @@ public class LinkScpt : MonoBehaviour
     public void ChangeFov(int fov)
     {
         float newFov;
-        if(fov > cam.Lens.FieldOfView)
+        if (fov > cam.Lens.FieldOfView)
             newFov = Mathf.Lerp(cam.Lens.FieldOfView, fov, 1f * Time.deltaTime);
         else
-            newFov = Mathf.Lerp(cam.Lens.FieldOfView, fov, 10f*Time.deltaTime);
+            newFov = Mathf.Lerp(cam.Lens.FieldOfView, fov, 10f * Time.deltaTime);
 
         cam.Lens.FieldOfView = newFov;
     }
@@ -170,5 +172,10 @@ public class LinkScpt : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Water")) isInWater = false;
+    }
+
+    public void Attack()
+    {
+
     }
 }

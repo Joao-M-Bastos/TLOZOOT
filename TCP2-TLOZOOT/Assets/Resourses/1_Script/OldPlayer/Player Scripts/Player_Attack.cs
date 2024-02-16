@@ -8,8 +8,6 @@ public class Player_Attack : MonoBehaviour
     public LayerMask enemyLayerMask;
     public Animator slingshotAnimator;
 
-
-
     //Attack
     public bool canAttack;
     public float atkCooldown;
