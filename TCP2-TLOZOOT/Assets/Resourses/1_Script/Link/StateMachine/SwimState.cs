@@ -85,5 +85,9 @@ public class SwimState : BaseState
         {
             machineController.ChangeState(machineController.onAirState);
         }
+        else if (link.CanClimbCorner())
+        {
+            machineController.ChangeState(machineController.cornerState);
+        }
     }
 }

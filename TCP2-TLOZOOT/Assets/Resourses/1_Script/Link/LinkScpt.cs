@@ -108,7 +108,7 @@ public class LinkScpt : MonoBehaviour
     public bool RayFrontal()
     {
         //Verifica se há uma parede escalavel a frente
-        Vector3 rayStartPos = transform.position + new Vector3(0, 0.8f, 0);
+        Vector3 rayStartPos = transform.position + new Vector3(0, 1.15f, 0);
 
         Debug.DrawRay(rayStartPos, transform.forward * 1.3f, Color.green);
 
@@ -128,8 +128,8 @@ public class LinkScpt : MonoBehaviour
 
         Debug.DrawRay(rayStartPos, -transform.up * 0.5f, Color.green);
 
-        if (Physics.Raycast(rayStartPos, -transform.up, out RaycastHit rayAcima, 0.4f, ClimbMask)
-        || Physics.Raycast(rayStartPos, -transform.up, out rayAcima, 0.4f, GroundMask))
+        if (Physics.Raycast(rayStartPos, -transform.up, out RaycastHit rayAcima, 0.2f, ClimbMask)
+        || Physics.Raycast(rayStartPos, -transform.up, out rayAcima, 0.2f, GroundMask))
         {
             return true;
         }
@@ -141,10 +141,10 @@ public class LinkScpt : MonoBehaviour
         //Verifica se há uma parede escalavel a frente
         Vector3 rayStartPos = transform.position + new Vector3(0f, 1.5f, 0f);
 
-        Debug.DrawRay(rayStartPos, transform.forward * 2.4f, Color.green);
+        Debug.DrawRay(rayStartPos, transform.forward * 2.0f, Color.green);
 
         if (Physics.Raycast(rayStartPos, transform.forward, out RaycastHit rayAcimaFrontal, 2.4f, ClimbMask)
-        || Physics.Raycast(rayStartPos, transform.forward, out rayAcimaFrontal, 2.4f, GroundMask))
+        || Physics.Raycast(rayStartPos, transform.forward, out rayAcimaFrontal, 2.0f, GroundMask))
         {
             return true;
         }
