@@ -14,7 +14,7 @@ public class LinkScpt : MonoBehaviour
     [SerializeField] LockOn lockOn;
     public Rigidbody RB => linkRigidbody;
 
-    [SerializeField] LinkCombat linkCombat;
+    [SerializeField] LinkAttack linkAttack;
 
     #endregion
 
@@ -178,7 +178,7 @@ public class LinkScpt : MonoBehaviour
 
     public void LockCamera()
     {
-        lockOn.
+        
     }
 
     public void Attack()
